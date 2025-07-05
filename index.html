@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="portfolio.css">
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+    font-family: system-ui, -apple-system;
+}
+body{
+    background-color: black;
+    height:150vh;
+}
+#container{
+    background-image: url('Tengen.png');
+    height: 100vh;
+    background-position: center ;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: black;
+}
+#logo{
+    background-image: url('Ae-Logo.png');
+    height: 120px;
+    width: 120px;
+    background-position: center ;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    left: 55px;
+}
+#name{
+    color: white;
+    position: absolute;
+    top: 25px;
+    left: 170px;
+    font-size: 50px;
+    font-weight: bold;
+    animation: top 2s ease;
+}
+#text1{
+    color: white;
+    position: absolute;
+    top: 200px;
+    left: 100px;
+    font-size: 65px;
+    font-weight: bold;
+    animation: slide 1.5s ease;
+}
+#text3{
+    color: #1aa7ec;
+    position: absolute;
+    top: 200px;
+    left: 330px;
+    font-size: 65px;
+    font-weight: bold;
+    animation: slidey 1.5s ease ;
+}
+#text2{
+    color: white;
+    position: absolute;
+    top:380px;
+    left: 80px;
+    font-size: 20px;
+    animation: slide2 3s ease ;
+}
+#hm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    width: 340px;
+    border: 2px solid #1aa7ec;
+    color: black;
+    background-color: #1aa7ec;
+    position: absolute;
+    top:620px;
+    left: 100px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: all 0.3s ease 0s;
+    animation: bottom 3s ease;
+}
+#ex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    width: 340px;
+    border: 2px solid #1aa7ec;
+    background-color: #1aa7ec;
+    color: black;
+    position: absolute;
+    top: 620px;
+    left: 460px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: all 0.3s ease 0s;
+    animation: bottom2 3.5s ease;
+}
+#opt{
+    height: 80px;
+    width: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    left: 700px;
+    background-color: black;
+    justify-content: space-around;
+    animation: top2 1.5s ease;
+}
+a{
+    font-weight: bold;
+    font-size: 22px;
+    text-decoration: none;
+    /* padding: 12px; */
+    color: white;
+    /* border: 2px solid black;
+    background-color: black;
+    border-radius: 40px; */
+    transition: all .3s ease;
+}
+#one{
+    color: white;
+    border: 2px solid #1aa7ec;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px;
+    background-color: #1aa7ec;
+}
+a:hover{
+    /* border: 2px solid #1aa7ec; */
+    color: #1aa7ec;
+    /* padding: 12px;
+    border-radius: 40px; */
+}
+#ex:hover,#hm:hover{
+    cursor: pointer;
+    /* box-shadow: 0 0 10px #ccc; */
+    color: white;
+}
+@keyframes slide {
+    0%{
+        position: absolute;
+        top: 200px;
+        left: 1100px; 
+    }
+    100%{
+        position: absolute;
+        top: 200px;
+        left: 100px;
+    }
+}
+@keyframes slide2 {
+    0%{
+        position: absolute;
+        top:380px;
+        left: 1100px;
+    }
+    100%{
+        position: absolute;
+        top: 380px;
+        left: 80px;
+    }
+}
+@keyframes slidey {
+    0%{
+        position: absolute;
+        top: 200px;
+        left: 1430px; 
+    }
+    100%{
+        position: absolute;
+        top: 200px;
+        left: 330px;
+    }
+}
+@keyframes bottom {
+    0%{
+        position: absolute;
+        top:1560px;
+        left: 100px;
+    }
+    100%{
+        position: absolute;
+        top:620px;
+        left: 100px;
+    }
+}
+@keyframes bottom2 {
+    0%{
+        position: absolute;
+        top:1560px;
+        left: 460px;
+    }
+    100%{
+        position: absolute;
+        top:620px;
+        left: 460px;
+    }
+}
+@keyframes top {
+    0%
+    {   position: absolute;
+        top:-80px;
+    }
+    100%{
+        position: absolute;
+        top: 25px;
+    }
+}
+@keyframes top2 {
+    0%
+    { 
+        position: absolute;
+        top:-80px;
+    }
+    100%{
+        position: absolute;
+        top: 10px;
+    }
+}
+::-webkit-scrollbar{
+    width: 15px;
+}
+::-webkit-scrollbar-track{
+    background-color: black;
+}
+::-webkit-scrollbar-thumb{
+    background: black;
+    border-radius: 20px;
+}
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="logo"></div>
+        <p id="name">fahedshafi</p>
+        <pre id="text1">Hi, I'm 
+An Editor</pre>
+        <pre id="text3">Fahed</pre>
+        <pre id="text2">  I'm a passionate video editor working with After Effects 2024, specializing in creating 
+  minimalistic yet eye-catching edits that leave a lasting impression. My style focuses on clean transitions,
+  smooth pacing, and a sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube,
+  and reels. From cinematic montages to fast-paced reels or aesthetic mood edits, I can handle 
+  a wide range of styles. I always aim to bring creativity, emotion, and clarity into every frame.
+  Whether it's a brand video, a content creator reel, or a personal project, I give it my full attention
+  and polish. Let's create something that not only looks good — but feels powerful too.</pre>
+   <a href="https://www.instagram.com/fahedshafi?utm_source=ig_web_button_share_sheet&igsh=d3M2Ymtxc2Q1MDJj" id="hm">Hire Me</a>
+   <a href="https://drive.google.com/drive/folders/1uDvoxtllKAKVty2DhceCPb1Vuxhfd4ee?usp=sharing" id="ex">Works</a>
+   <div id="opt">
+    <a href="#" id="one">Home</a>
+    <a href="file:///C:/only%20codes/amazon.html" id="two">About Us</a>
+    <a href="#" id="three">Services</a>
+    <a href="#" id="four">Projects</a>
+    <a href="#" id="five">Contact</a>
+   </div>
+    </div>
+</body>
+</html>
