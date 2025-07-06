@@ -1,267 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="portfolio.css">
-    <style>
-        *{
-    padding: 0;
-    margin: 0;
-    font-family: system-ui, -apple-system;
-}
-body{
-    background-color: black;
-    height:150vh;
-}
-#container{
-    background-image: url('Tengen.png');
-    height: 100vh;
-    background-position: center ;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-color: black;
-}
-#logo{
-    background-image: url('Ae-Logo.png');
-    height: 120px;
-    width: 120px;
-    background-position: center ;
-    background-repeat: no-repeat;
-    background-size: contain;
-    position: absolute;
-    left: 55px;
-}
-#name{
-    color: white;
-    position: absolute;
-    top: 25px;
-    left: 170px;
-    font-size: 50px;
-    font-weight: bold;
-    animation: top 2s ease;
-}
-#text1{
-    color: white;
-    position: absolute;
-    top: 200px;
-    left: 100px;
-    font-size: 65px;
-    font-weight: bold;
-    animation: slide 1.5s ease;
-}
-#text3{
-    color: #1aa7ec;
-    position: absolute;
-    top: 200px;
-    left: 330px;
-    font-size: 65px;
-    font-weight: bold;
-    animation: slidey 1.5s ease ;
-}
-#text2{
-    color: white;
-    position: absolute;
-    top:380px;
-    left: 80px;
-    font-size: 20px;
-    animation: slide2 3s ease ;
-}
-#hm{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70px;
-    width: 340px;
-    border: 2px solid #1aa7ec;
-    color: black;
-    background-color: #1aa7ec;
-    position: absolute;
-    top:620px;
-    left: 100px;
-    font-size: 30px;
-    font-weight: bold;
-    border-radius: 10px;
-    transition: all 0.3s ease 0s;
-    animation: bottom 3s ease;
-}
-#ex{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70px;
-    width: 340px;
-    border: 2px solid #1aa7ec;
-    background-color: #1aa7ec;
-    color: black;
-    position: absolute;
-    top: 620px;
-    left: 460px;
-    font-size: 30px;
-    font-weight: bold;
-    border-radius: 10px;
-    transition: all 0.3s ease 0s;
-    animation: bottom2 3.5s ease;
-}
-#opt{
-    height: 80px;
-    width: 800px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 10px;
-    left: 700px;
-    background-color: black;
-    justify-content: space-around;
-    animation: top2 1.5s ease;
-}
-a{
-    font-weight: bold;
-    font-size: 22px;
-    text-decoration: none;
-    /* padding: 12px; */
-    color: white;
-    /* border: 2px solid black;
-    background-color: black;
-    border-radius: 40px; */
-    transition: all .3s ease;
-}
-#one{
-    color: white;
-    border: 2px solid #1aa7ec;
-    padding: 10px 20px 10px 20px;
-    border-radius: 10px;
-    background-color: #1aa7ec;
-}
-a:hover{
-    /* border: 2px solid #1aa7ec; */
-    color: #1aa7ec;
-    /* padding: 12px;
-    border-radius: 40px; */
-}
-#ex:hover,#hm:hover{
-    cursor: pointer;
-    /* box-shadow: 0 0 10px #ccc; */
-    color: white;
-}
-@keyframes slide {
-    0%{
-        position: absolute;
-        top: 200px;
-        left: 1100px; 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fahed Shafi - Editor Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system;
+      box-sizing: border-box;
     }
-    100%{
-        position: absolute;
-        top: 200px;
-        left: 100px;
+
+    body {
+      background-color: black;
+      color: white;
+      overflow-x: hidden;
     }
-}
-@keyframes slide2 {
-    0%{
-        position: absolute;
-        top:380px;
-        left: 1100px;
+
+    #container {
+      background-image: url('Tengen.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-color: black;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
     }
-    100%{
-        position: absolute;
-        top: 380px;
-        left: 80px;
+
+    #logo {
+      background-image: url('Ae-Logo.png');
+      height: 100px;
+      width: 100px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      top: 5px;
+      left: 20px;
     }
-}
-@keyframes slidey {
-    0%{
-        position: absolute;
-        top: 200px;
-        left: 1430px; 
+
+    #name {
+      position: absolute;
+      top: 25px;
+      left: 140px;
+      font-size: 40px;
+      font-weight: bold;
+      animation: top 1.5s ease;
     }
-    100%{
-        position: absolute;
-        top: 200px;
-        left: 330px;
+
+    #opt {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      animation: top2 1.5s ease;
+      flex-wrap: wrap;
     }
-}
-@keyframes bottom {
-    0%{
-        position: absolute;
-        top:1560px;
-        left: 100px;
+
+    #opt a {
+      color: hsl(0, 0%, 100%);
+      font-size: 18px;
+      text-decoration: none;
+      transition: 0.3s ease;
     }
-    100%{
-        position: absolute;
-        top:620px;
-        left: 100px;
+
+    #opt a#one {
+      background-color: #1aa7ec;
+      padding: 3px 16px;
+      border-radius: 8px;
     }
-}
-@keyframes bottom2 {
-    0%{
-        position: absolute;
-        top:1560px;
-        left: 460px;
+
+    #opt a:hover {
+      color: #1aa7ec;
     }
-    100%{
-        position: absolute;
-        top:620px;
-        left: 460px;
+
+    .headline {
+      margin-top: 180px;
+      font-size: 50px;
+      font-weight: bold;
+      padding-left: 20px;
+      animation: slide 1.5s ease;
     }
-}
-@keyframes top {
-    0%
-    {   position: absolute;
-        top:-80px;
+
+    .highlight {
+      color: #1aa7ec;
+      margin-top: -10px;
+      font-size: 80px;
+      font-weight: bold;
+      padding-left: 20px;
+      animation: slidey 1.5s ease;
     }
-    100%{
-        position: absolute;
-        top: 25px;
+
+    .bio {
+      margin-top: 40px;
+      font-size: 18px;
+      line-height: 1.6;
+      padding: 0 20px;
+      animation: slide2 2s ease;
+      max-width: 800px;
     }
-}
-@keyframes top2 {
-    0%
-    { 
-        position: absolute;
-        top:-80px;
+
+    .buttons {
+      margin-top: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-left: 20px;
+      animation: bottom 2.5s ease;
     }
-    100%{
-        position: absolute;
-        top: 10px;
+
+    .buttons a {
+      background-color: #1aa7ec;
+      color: black;
+      padding: 16px 40px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: 0.3s ease;
+      border: 2px solid #1aa7ec;
     }
-}
-::-webkit-scrollbar{
-    width: 15px;
-}
-::-webkit-scrollbar-track{
-    background-color: black;
-}
-::-webkit-scrollbar-thumb{
-    background: black;
-    border-radius: 20px;
-}
-    </style>
+
+    .buttons a:hover {
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #000000;
+    }
+
+    @keyframes slide {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slidey {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slide2 {
+      0% {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes bottom {
+      0% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes top {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes top2 {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: black;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1aa7ec;
+      border-radius: 10px;
+    }
+
+    /* Mobile Fix for Tengen.png */
+    @media screen and (max-width: 768px) {
+      #container {
+        background-size: cover;
+        background-position: center;
+        min-height: 130vh;
+      }
+
+      #logo {
+        position: static;
+        margin: 0 auto;
+      }
+
+      #name {
+        position: static;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      #opt {
+        position: static;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .headline,
+      .highlight,
+      .bio,
+      .buttons {
+        padding-left: 10px;
+        padding-right: 10px;
+        text-align: center;
+      }
+
+      .highlight {
+        padding-left: 10px;
+        margin-top: 0;
+      }
+
+      .buttons {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div id="container">
-        <div id="logo"></div>
-        <p id="name">fahedshafi</p>
-        <pre id="text1">Hi, I'm 
-An Editor</pre>
-        <pre id="text3">Fahed</pre>
-        <pre id="text2">  I'm a passionate video editor working with After Effects 2024, specializing in creating 
-  minimalistic yet eye-catching edits that leave a lasting impression. My style focuses on clean transitions,
-  smooth pacing, and a sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube,
-  and reels. From cinematic montages to fast-paced reels or aesthetic mood edits, I can handle 
-  a wide range of styles. I always aim to bring creativity, emotion, and clarity into every frame.
-  Whether it's a brand video, a content creator reel, or a personal project, I give it my full attention
-  and polish. Let's create something that not only looks good — but feels powerful too.</pre>
-   <a href="https://www.instagram.com/fahedshafi?utm_source=ig_web_button_share_sheet&igsh=d3M2Ymtxc2Q1MDJj" id="hm">Hire Me</a>
-   <a href="https://drive.google.com/drive/folders/1uDvoxtllKAKVty2DhceCPb1Vuxhfd4ee?usp=sharing" id="ex">Works</a>
-   <div id="opt">
-    <a href="#" id="one">Home</a>
-    <a href="file:///C:/only%20codes/amazon.html" id="two">About Us</a>
-    <a href="#" id="three">Services</a>
-    <a href="#" id="four">Projects</a>
-    <a href="#" id="five">Contact</a>
-   </div>
+  <div id="container">
+    <div id="logo"></div>
+    <div id="name">fahedshafi</div>
+
+    <div class="headline">Hi, I'm <br />An Editor</div>
+    <div class="highlight">Fahed</div>
+
+    <div class="bio">
+      I'm a passionate video editor working with After Effects 2024, specializing in creating minimalistic yet
+      eye-catching edits that leave a lasting impression. My style focuses on clean transitions, smooth pacing, and a
+      sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube, and reels. From cinematic
+      montages to fast-paced reels or aesthetic mood edits, I can handle a wide range of styles. I always aim to bring
+      creativity, emotion, and clarity into every frame. Whether it's a brand video, a content creator reel, or a
+      personal project, I give it my full attention and polish. Let's create something that not only looks good — but
+      feels powerful too.
     </div>
+
+    <div class="buttons">
+      <a href="https://www.instagram.com/fahedshafi?utm_source=ig_web_button_share_sheet&igsh=d3M2Ymtxc2Q1MDJj">Hire Me</a>
+      <a href="https://drive.google.com/drive/folders/1uDvoxtllKAKVty2DhceCPb1Vuxhfd4ee?usp=sharing">Works</a>
+    </div>
+
+    <div id="opt">
+      <a href="#" id="one">Home</a>
+      <a href="#">About</a>
+      <a href="#">Services</a>
+      <a href="#">Projects</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
 </body>
 </html>
