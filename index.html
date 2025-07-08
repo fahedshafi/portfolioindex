@@ -4,264 +4,287 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fahed Shafi - Editor Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system;
+      font-family: 'Poppins', sans-serif;
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       background-color: black;
       color: white;
       overflow-x: hidden;
-    }
-
-    #container {
-      background-image: url('Tengen.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center top;
-      background-color: black;
-      min-height: 100vh;
-      padding: 20px;
       position: relative;
     }
 
+    /* ✅ Fullscreen video background */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.5);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
     #logo {
-      background-image: url('Ae-Logo.png');
-      height: 100px;
-      width: 100px;
+      background-image: url('ME2.png');
+      border: 2px solid #1aa7ec;
+      border-radius: 50%;	
+      height: 60px;
+      width: 60px;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      position: absolute;
-      top: 5px;
-      left: 20px;
     }
 
     #name {
-      position: absolute;
-      top: 25px;
-      left: 140px;
-      font-size: 40px;
+      font-size: 28px;
       font-weight: bold;
-      animation: top 1.5s ease;
     }
 
-    #opt {
+    nav#opt {
       display: flex;
-      gap: 20px;
-      justify-content: center;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      animation: top2 1.5s ease;
+      gap: 16px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
-    #opt a {
-      color: hsl(0, 0%, 100%);
-      font-size: 18px;
+    nav#opt a {
+      color: white;
+      font-size: 16px;
       text-decoration: none;
       transition: 0.3s ease;
     }
 
-    #opt a#one {
+    nav#opt a#one {
       background-color: #1aa7ec;
-      padding: 3px 16px;
-      border-radius: 8px;
+      padding: 4px 12px;
+      border-radius: 6px;
     }
 
-    #opt a:hover {
+    nav#opt a:hover {
       color: #1aa7ec;
     }
 
     .headline {
-      margin-top: 100px;
+      margin-top: 80px;
       font-size: 50px;
       font-weight: bold;
       padding-left: 20px;
-      animation: slide 1.5s ease;
     }
 
     .highlight {
       color: #1aa7ec;
-      margin-top: -10px;
       font-size: 80px;
       font-weight: bold;
       padding-left: 20px;
-      animation: slidey 1.5s ease;
     }
 
-    .bio {
-      margin-top: 40px;
+    .section-heading {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1aa7ec;
+      padding-left: 20px;
+      margin-top: 60px;
+    }
+
+    .bio, .services {
+      margin-top: 20px;
       font-size: 18px;
       line-height: 1.6;
       padding: 0 20px;
-      animation: slide2 2s ease;
       max-width: 800px;
+      font-weight: 700;
     }
 
-    .buttons {
-      margin-top: 50px;
+    .projects {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding-left: 20px;
-      animation: bottom 2.5s ease;
+      gap: 30px;
+      padding: 40px 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
     }
 
-    .buttons a {
-      background-color: #1aa7ec;
-      color: black;
-      padding: 16px 40px;
-      font-size: 20px;
-      font-weight: bold;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: 0.3s ease;
+    .project-embed {
+      min-width: 280px;
+      background-color: #111;
       border: 2px solid #1aa7ec;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 0 10px #000;
+      flex-shrink: 0;
     }
 
-    .buttons a:hover {
-      background-color: transparent;
+    .project-embed iframe {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .project-embed p {
+      font-weight: 600;
+      margin-top: 10px;
+      color: #1aa7ec;
+      text-align: center;
+    }
+
+    .contact {
+      margin-top: 50px;
+      padding: 20px;
+    }
+
+    .contact p, .contact a {
+      font-size: 18px;
+      font-weight: 600;
       color: white;
+      display: block;
+      margin-bottom: 10px;
+      text-decoration: none;
+    }
+
+    form.form {
+      margin-top: 30px;
+      padding: 20px;
+      max-width: 500px;
+    }
+
+    .form input, .form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .form button {
+      padding: 12px 30px;
+      background-color: #1aa7ec;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 0 10px #000000;
+      color: black;
     }
 
-    @keyframes slide {
-      0% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(0);
-      }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 50px;
     }
 
-    @keyframes slidey {
-      0% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slide2 {
-      0% {
-        opacity: 0;
-        transform: translateX(50px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes bottom {
-      0% {
-        transform: translateY(100px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes top {
-      0% {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes top2 {
-      0% {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: black;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #1aa7ec;
-      border-radius: 10px;
-    }
-
-    /* Mobile Fix for Tengen.png */
     @media screen and (max-width: 768px) {
-      #container {
-        background-size: cover;
-        background-position: center;
-        min-height: 130vh;
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
       }
 
-      #logo {
-        position: static;
-        margin: 0 auto;
+      .brand {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
 
       #name {
-        position: static;
-        text-align: center;
-        margin-top: 10px;
+        font-size: 24px;
       }
 
-      #opt {
-        position: static;
+      nav#opt {
         justify-content: center;
-        margin-top: 20px;
+        gap: 10px;
+        flex-wrap: wrap;
       }
 
-      .headline,
-      .highlight,
-      .bio,
-      .buttons {
+      .headline {
+        font-size: 32px;
+        text-align: center;
+        margin-top: 50px;
+        padding: 0;
+      }
+
+      .highlight {
+        font-size: 50px;
+        text-align: center;
+        padding: 0;
+      }
+
+      .section-heading, .bio, .services, .contact, .form {
         padding-left: 10px;
         padding-right: 10px;
         text-align: center;
       }
 
-      .highlight {
-        padding-left: 10px;
-        margin-top: 0;
+      .projects {
+        padding: 20px 10px;
+        gap: 16px;
       }
 
-      .buttons {
-        justify-content: center;
+      .project-embed {
+        min-width: 240px;
       }
     }
   </style>
 </head>
 <body>
+  <!-- ✅ Background video -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="01mot.mp4" type="video/mp4">
+  </video>
+
   <div id="container">
-    <div id="logo"></div>
-    <div id="name">fahedshafi</div>
+    <header>
+      <div class="brand">
+        <div id="logo"></div>
+        <div id="name">fahedshafi</div>
+      </div>
+      <nav id="opt">
+        <a href="#home" id="one">Home</a>
+        <a href="#bio">About</a>
+        <a href="#services">Services</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
 
-    <div class="headline">Hi, I'm <br />An Editor</div>
-    <div class="highlight">Fahed</div>
+    <main>
+      <section id="home">
+        <div class="headline">Hi, I'm <br />An Editor</div>
+        <div class="highlight">Fahed</div>
+      </section>
 
-    <div class="bio">
-      I'm a passionate video editor working with After Effects 2024, specializing in creating minimalistic yet
+      <section id="bio">
+        <h2 class="section-heading">About Myself</h2>
+        <div class="bio">
+          I'm a passionate video editor working with After Effects 2024, specializing in creating minimalistic yet
       eye-catching edits that leave a lasting impression. My style focuses on clean transitions, smooth pacing, and a
       sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube, and reels. From cinematic
       montages to fast-paced reels or aesthetic mood edits, I can handle a wide range of styles. I always aim to bring
@@ -269,19 +292,54 @@
       personal project, I give it my full attention and polish. Let's create something that not only looks good — but
       feels powerful too.
     </div>
+      </section>
 
-    <div class="buttons">
-      <a href="https://www.instagram.com/fahedshafi?utm_source=ig_web_button_share_sheet&igsh=d3M2Ymtxc2Q1MDJj">Hire Me</a>
-      <a href="https://drive.google.com/drive/folders/1uDvoxtllKAKVty2DhceCPb1Vuxhfd4ee?usp=sharing">Works</a>
-    </div>
+      <section id="services">
+        <h2 class="section-heading">Services</h2>
+        <p class="services">I provide high-quality After Effects editing services including cinematic montages, social media reels, VFX transitions,
+      typography animations, motion tracking, and visual enhancements. Whether you're a content creator, brand, or business —
+      I can transform raw footage into polished, eye-catching videos optimized for impact.</p>
+      </section>
 
-    <div id="opt">
-      <a href="#" id="one">Home</a>
-      <a href="#">About</a>
-      <a href="#">Services</a>
-      <a href="#">Projects</a>
-      <a href="#">Contact</a>
-    </div>
+      <section id="projects">
+        <h2 class="section-heading">Projects</h2>
+        <div class="projects">
+          <div class="project-embed">
+            <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen></iframe>
+            <p>MY Project1</p>
+          </div>
+          <div class="project-embed">
+            <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen></iframe>
+            <p>MY Project2</p>
+          </div>
+          <div class="project-embed">
+            <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen></iframe>
+            <p>MY Project3</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <h2 class="section-heading">Contact</h2>
+        <div class="contact">
+          <p>Email: <a href="mailto:fahadshafisheikh@outlook.com">fahadshafisheikh@outlook.com</a></p>
+          <p>Instagram: <a href="https://www.instagram.com/fahedshafi" target="_blank">@fahedshafi</a></p>
+        </div>
+
+        <form action="https://formsubmit.co/fahadshafisheikh@outlook.com" method="POST" class="form">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      &copy; 2025 Fahed Shafi. All rights reserved.
+    </footer>
   </div>
 </body>
 </html>
