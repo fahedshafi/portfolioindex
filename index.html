@@ -66,7 +66,6 @@
       font-weight: bold;
     }
 
-    /* ✅ Dropdown Menu */
     nav#opt {
       position: relative;
     }
@@ -165,10 +164,27 @@
     }
 
     .project-embed iframe {
+      height: 100%;
       width: 100%;
-      aspect-ratio: 9 / 16;
       border: none;
       border-radius: 8px;
+    }
+
+    /* Portrait Shorts */
+    .project-embed.portrait iframe {
+      aspect-ratio: 9 / 16;
+    }
+
+    /* Landscape Long-form */
+    .project-embed.landscape iframe {
+      aspect-ratio: 16 / 9;
+    }
+
+    /* Make long-form projects 3x bigger on large screens */
+    @media screen and (min-width: 1024px) {
+      .project-embed.landscape {
+        min-width: 840px; /* 280px × 3 */
+      }
     }
 
     .project-embed p {
@@ -291,8 +307,9 @@
             <a href="#home">Home</a>
             <a href="#bio">About</a>
             <a href="#services">Services</a>
-            <a href="#charges">Charges</a> <!-- ✅ Added -->
+            <a href="#charges">Charges</a>
             <a href="#projects">Projects</a>
+            <a href="#longform">Long-form</a>
             <a href="#contact">Contact</a>
           </div>
         </div>
@@ -325,7 +342,6 @@
         </p>
       </section>
 
-      <!-- ✅ New Charges Section -->
       <section id="charges">
         <h2 class="section-heading">Charges</h2>
         <p class="services">
@@ -336,19 +352,29 @@
       </section>
 
       <section id="projects">
-        <h2 class="section-heading">Projects</h2>
+        <h2 class="section-heading">Projects (Shorts)</h2>
         <div class="projects">
-          <div class="project-embed">
+          <div class="project-embed portrait">
             <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen></iframe>
             <p>MY Project1</p>
           </div>
-          <div class="project-embed">
+          <div class="project-embed portrait">
             <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen></iframe>
             <p>MY Project2</p>
           </div>
-          <div class="project-embed">
+          <div class="project-embed portrait">
             <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen></iframe>
             <p>MY Project3</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="longform">
+        <h2 class="section-heading">Long-form Projects</h2>
+        <div class="projects">
+          <div class="project-embed landscape">
+            <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen></iframe>
+            <p>MY Long-form Project</p>
           </div>
         </div>
       </section>
