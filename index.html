@@ -65,12 +65,13 @@
             color: white;
             overflow-x: hidden;
             position: relative;
-            /* PERFORMANCE FIX: Static background gradient replacing the video */
             background-image: radial-gradient(at 10% 15%, #1a1532, #0d0a1f 70%);
-            
-            /* CUSTOM CURSOR: CHECK IMAGE SIZE AND PATH */
-            /* The image path is correctly set to 'custom-cursor.png' */
             cursor: url('MinecraftSword_00000.png'), auto; 
+        }
+        
+        /* IMPROVEMENT: Ensure clickable elements use standard pointer for usability */
+        a, button, .dropbtn, .cta-button, input[type="submit"] {
+            cursor: pointer !important;
         }
 
         /* Abstract background shapes/gradients */
@@ -85,7 +86,6 @@
             filter: blur(80px);
             opacity: 0.6;
             z-index: -1;
-            /* Apply float animation */
             animation: float 15s infinite alternate ease-in-out;
         }
 
@@ -100,16 +100,13 @@
             filter: blur(90px);
             opacity: 0.5;
             z-index: -1;
-            /* Apply float animation (with delay/different timing) */
             animation: float 20s infinite alternate-reverse ease-in-out;
         }
 
-        /* ADDED: Wrapper for sticky header to prevent container overflow on scroll */
         .header-wrapper {
             position: sticky;
             top: 0;
-            z-index: 1000; /* Ensure it stays on top of everything */
-            /* Add some padding for visual space on top of viewport */
+            z-index: 1000;
             padding: 15px 0;
         }
 
@@ -130,8 +127,6 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             border-radius: 12px;
             transition: all 0.3s ease;
-            
-            /* Enable 3D transform on glass cards for tilt effect */
             transform-style: preserve-3d;
             perspective: 1000px;
         }
@@ -150,19 +145,13 @@
             align-items: center;
             flex-wrap: wrap;
             padding: 15px 30px;
-            /* REMOVED margin-top and REPLACED with padding on .header-wrapper */
-            border-radius: 15px;
-            
-            /* Combined glassmorphism styling into the class */
-            /* NOTE: Using the glass-card class is a cleaner approach but sticking to original CSS structure for minimal changes */
             background: rgba(255, 255, 255, 0.05); 
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             position: relative; 
             z-index: 100; 
-            
-            /* Intro Animation for Header */
+            border-radius: 15px;
             animation: slideInUp 0.6s ease-out 0.2s backwards;
         }
 
@@ -204,10 +193,7 @@
             font-weight: 600;
             border: none;
             border-radius: 10px;
-            cursor: pointer;
             transition: background-color 0.3s ease;
-            /* Use default pointer for interactive element */
-            cursor: pointer;
         }
         
         .dropdown-content {
@@ -221,7 +207,6 @@
             right: 0;
             padding: 5px 0;
             border: 1px solid rgba(93, 63, 211, 0.3);
-            /* Add animation for dropdown appearance */
             transform-origin: top right;
             animation: scaleIn 0.3s ease-out forwards;
         }
@@ -235,8 +220,6 @@
             transition: background-color 0.3s ease;
             border-radius: 4px;
             margin: 0 8px;
-            /* Use default pointer for interactive element */
-            cursor: pointer;
         }
 
         .dropdown-content a:hover {
@@ -253,7 +236,6 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start; 
-            /* Adjusted padding to account for sticky header height */
             padding: 80px 0 80px; 
             gap: 50px;
             position: relative; 
@@ -266,14 +248,14 @@
         }
         
         /* Apply Intro Animation to Hero Text */
-        .hero-text div:nth-child(1) { animation: slideInUp 0.8s ease-out 0.4s backwards; }
+        .hero-text h1 { animation: slideInUp 0.8s ease-out 0.4s backwards; }
         .hero-text div:nth-child(2) { animation: slideInUp 0.8s ease-out 0.5s backwards; }
         .hero-text p { animation: slideInUp 0.8s ease-out 0.6s backwards; }
         .hero-text a { animation: slideInUp 0.8s ease-out 0.7s backwards; }
         
         /* Hero Photo Container - Now directly holding the new image */
         .hero-photo-container {
-            position: relative; /* Keep relative for ::before pseudo-element */
+            position: absolute; /* Revert to absolute for desktop positioning */
             width: 300px;
             height: 350px;
             border-radius: 15px;
@@ -281,20 +263,13 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            overflow: hidden; /* Crucial to clip the image within the container */
-            z-index: 50; /* Base z-index */
-            
-            /* Positioning on Desktop */
+            overflow: hidden; 
+            z-index: 50; 
             right: 30px; 
             top: 80px;
-            position: absolute; /* Revert to absolute for desktop positioning */
-
-            /* Apply glass-card mixin properties */
             transform-style: preserve-3d;
             perspective: 1000px;
             transition: all 0.3s ease;
-            
-            /* Intro Animation for Card */
             animation: slideInUp 0.8s ease-out 0.8s backwards;
         }
         
@@ -316,20 +291,19 @@
             transform: rotate(-45deg);
             transform-origin: 0 0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 52; /* Ensure ribbon is on top */
+            z-index: 52; 
         }
 
         /* Direct image styling within the container */
         .hero-photo-container img {
-            width: 115%; /* Make image fit container width */
-            height: 115%; /* Adjust height proportionally */
-            display: block; /* Remove extra space below image */
-            object-fit: contain; /* Ensure the whole image is visible, scale down if needed */
-            object-position: center bottom; /* Position the Enderman at the bottom of the container */
-            transform: translateY(-40px); /* Adjust vertical position to show the top of the AE logo */
-            transform: translateX(-10px);
-            z-index: 51; /* Image slightly above the card for a subtle layered look */
-            position: relative; /* Needed for z-index to work against ::before */
+            width: 115%; 
+            height: 115%; 
+            display: block; 
+            object-fit: contain; 
+            object-position: center bottom; 
+            transform: translateY(-40px) translateX(-10px);
+            z-index: 51; 
+            position: relative; 
         }
         
         .headline {
@@ -358,8 +332,6 @@
             font-weight: 600;
             border-radius: 10px;
             transition: background-color 0.3s ease, transform 0.2s;
-            /* Use default pointer for interactive element */
-            cursor: pointer;
         }
         
         .cta-button:hover {
@@ -400,7 +372,7 @@
 
         .info-card {
             padding: 30px;
-            /* Apply glass-card mixin */
+            /* Applied glass-card mixin properties */
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -432,7 +404,7 @@
             font-weight: 400;
         }
         
-        /* Project Cards */
+        /* Project Cards - Video Optimization Styling */
         .projects {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -444,7 +416,6 @@
 
         .project-embed {
             padding: 20px;
-            /* Apply glass-card mixin */
             background: rgba(255, 255, 255, 0.05); 
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -454,8 +425,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            
-            /* Apply Scroll Animation class */
             opacity: 0;
             transform: translateY(30px) scale(0.95);
             transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
@@ -465,24 +434,66 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 30px rgba(93, 63, 211, 0.5);
         }
-
-        .project-embed iframe {
+        
+        /* Video Container Styling */
+        .video-container {
+            position: relative;
             width: 100%;
-            border: none;
+            overflow: hidden;
             border-radius: 10px;
             background-color: #000;
         }
 
-        .project-embed.portrait iframe {
+        .project-embed.portrait .video-container {
             aspect-ratio: 9 / 16;
             max-height: 450px;
         }
 
-        .project-embed.landscape iframe {
+        .project-embed.landscape .video-container {
             aspect-ratio: 16 / 9;
             max-height: 300px;
         }
-        
+
+        .project-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Initially hide iframe for performance */
+            display: none; 
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #1e1e1e; /* Dark placeholder color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ccc;
+            font-size: 16px;
+            font-weight: 500;
+            position: relative;
+            z-index: 10;
+        }
+
+        .video-placeholder::after {
+            content: '▶️ Click to Load Video';
+            position: absolute;
+            padding: 10px 20px;
+            background: #5d3fd3;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .video-placeholder:hover::after {
+            background: #7b58f8;
+        }
+
         .project-embed p {
             font-weight: 600;
             margin-top: 15px;
@@ -517,7 +528,7 @@
 
         .contact-info {
             flex: 1;
-            /* Apply glass-card mixin */
+            /* Applied glass-card mixin properties */
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -548,8 +559,6 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
-            /* Use default pointer for interactive element */
-            cursor: pointer;
         }
         
         .contact-info a:hover {
@@ -559,7 +568,7 @@
         .form {
             flex: 1;
             padding: 30px;
-            /* Apply glass-card mixin */
+            /* Applied glass-card mixin properties */
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -575,6 +584,14 @@
             background: rgba(255, 255, 255, 0.08);
             box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
             transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+
+        .form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #ccc;
+            font-size: 14px;
         }
 
         .form input, .form textarea {
@@ -604,12 +621,9 @@
             border: none;
             font-weight: bold;
             border-radius: 10px;
-            cursor: pointer;
             color: white;
             font-size: 16px;
             transition: background-color 0.3s ease, transform 0.2s;
-            /* Use default pointer for interactive element */
-            cursor: pointer;
         }
         
         .form button:hover {
@@ -624,18 +638,17 @@
             color: #777;
             margin-top: 50px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            /* Apply scroll animation class */
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        /* Media Queries (Updated for Enderman Fix + Animations) */
+        /* Media Queries (Updated for Responsiveness) */
         @media screen and (max-width: 1000px) {
             #home {
                 flex-direction: column;
                 align-items: center;
-                padding-bottom: 50px; /* Reduced padding as image is contained */
+                padding-bottom: 50px; 
             }
             
             .hero-text {
@@ -649,18 +662,17 @@
             
             /* Mobile Positioning for hero-photo-container */
             .hero-photo-container {
-                position: relative; /* Change to relative for stacking */
-                margin-top: 40px; /* Space from text */
+                position: relative; 
+                margin-top: 40px; 
                 right: auto;
                 top: auto;
-                /* Remove hover tilt on mobile to prevent accidental scrolls/flickers */
                 transform: none;
             }
             
             .hero-photo-container img {
-                object-fit: contain; /* Ensure it fits */
+                object-fit: contain; 
                 object-position: center bottom;
-                transform: translateY(10px); /* Adjust to show logo */
+                transform: translateY(10px); 
             }
             
             .info-card-grid {
@@ -672,7 +684,7 @@
                 gap: 30px;
             }
             
-            /* Disable custom cursor on mobile, as it often causes issues */
+            /* Disable custom cursor on mobile */
             body {
                 cursor: auto; 
             }
@@ -702,7 +714,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .project-embed.landscape iframe {
+            .project-embed.landscape .video-container {
                 max-height: 200px;
             }
         }
@@ -742,7 +754,7 @@
         <main>
             <section id="home">
                 <div class="hero-text">
-                    <div class="headline">Hi, I'm An Editor</div>
+                    <h1 class="headline">Hi, I'm An Editor</h1>
                     <div class="highlight">Fahed</div>
                     <p style="font-size: 18px; margin-top: 20px; color: #ccc;">Passionate After Effects editor specializing in cinematic, minimalistic reels and high-impact social media content.</p>
                     <a href="#contact" class="cta-button">Hire Me Now</a>
@@ -796,15 +808,24 @@
                 <h2 class="section-heading animate-on-scroll">Projects (Shorts)</h2>
                 <div class="projects">
                     <div class="project-embed portrait animate-on-scroll">
-                        <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
                         <p>MY Project1 (VFX Reel)</p>
                     </div>
                     <div class="project-embed portrait animate-on-scroll">
-                        <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
                         <p>MY Project2 (Aesthetic Mood)</p>
                     </div>
                     <div class="project-embed portrait animate-on-scroll">
-                        <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <div class="video-container">
+                             <div class="video-placeholder" data-src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
                         <p>MY Project3 (Cinematic Pacing)</p>
                     </div>
                 </div>
@@ -814,7 +835,10 @@
                 <h2 class="section-heading animate-on-scroll">Long-form Projects</h2>
                 <div class="projects">
                     <div class="project-embed landscape animate-on-scroll" style="grid-column: 1 / -1;">
-                        <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <div class="video-container">
+                             <div class="video-placeholder" data-src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
                         <p>MY Long-form Project (Promotional)</p>
                     </div>
                 </div>
@@ -833,9 +857,12 @@
                     <form action="https://formsubmit.co/fahadshafisheikh@outlook.com" method="POST" class="form animate-on-scroll">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_honey" style="display:none">
-                        <input type="text" name="name" placeholder="Your Name" required>
-                        <input type="email" name="email" placeholder="Your Email" required>
-                        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
                         <button type="submit">Send Message</button>
                     </form>
                 </div>
@@ -850,13 +877,14 @@
     <script>
         // JavaScript for Scroll Animations (Intersection Observer)
         document.addEventListener("DOMContentLoaded", function() {
-            // Minor JS optimization: The footer now has the class and is included here
             const elements = document.querySelectorAll('.animate-on-scroll');
             
+            // IMPROVEMENT: Use a negative rootMargin to trigger the animation earlier,
+            // preventing the elements from "popping in" at the last second.
             const observerOptions = {
                 root: null, // viewport
-                rootMargin: '0px',
-                threshold: 0.1 // Trigger when 10% of the item is visible
+                rootMargin: '0px 0px -100px 0px', // Trigger when 100px of the element is still outside the bottom
+                threshold: 0.1 
             };
 
             function handleIntersect(entries, observer) {
@@ -870,9 +898,28 @@
 
             const observer = new IntersectionObserver(handleIntersect, observerOptions);
 
-            // Observe all elements with the animation class, including the footer
-            elements.forEach(el => {
-                observer.observe(el);
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // --- VIDEO LAZY LOADING FUNCTIONALITY (PERFORMANCE FIX) ---
+            const videoPlaceholders = document.querySelectorAll('.video-placeholder');
+
+            videoPlaceholders.forEach(placeholder => {
+                placeholder.addEventListener('click', function() {
+                    const container = this.closest('.video-container');
+                    const iframe = container.querySelector('iframe');
+                    
+                    // 1. Set the iframe's src from the data-src attribute
+                    const videoSrc = iframe.getAttribute('data-src');
+                    iframe.setAttribute('src', videoSrc);
+                    
+                    // 2. Hide the placeholder
+                    this.style.display = 'none';
+                    
+                    // 3. Show the iframe (starts loading the heavy Google Drive viewer)
+                    iframe.style.display = 'block';
+                });
             });
         });
     </script>
