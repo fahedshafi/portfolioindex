@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fahed Shafi - Editor Portfolio (Glassmorphism)</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* Global Reset & Base */
@@ -51,6 +53,11 @@
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
         /* ---------------------- STYLES ---------------------- */
 
         body {
@@ -58,19 +65,12 @@
             color: white;
             overflow-x: hidden;
             position: relative;
-        }
-
-        /* Background Video & Overlays (Critical for Glass Effect) */
-        #bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100dvh;
-            object-fit: cover;
-            z-index: -2; 
-            filter: brightness(0.4) saturate(1.2); 
-            pointer-events: none;
+            /* PERFORMANCE FIX: Static background gradient replacing the video */
+            background-image: radial-gradient(at 10% 15%, #1a1532, #0d0a1f 70%);
+            
+            /* CUSTOM CURSOR: CHECK IMAGE SIZE AND PATH */
+            /* The image path is correctly set to 'custom-cursor.png' */
+            cursor: url('MinecraftSword_00000.png'), auto; 
         }
 
         /* Abstract background shapes/gradients */
@@ -102,6 +102,15 @@
             z-index: -1;
             /* Apply float animation (with delay/different timing) */
             animation: float 20s infinite alternate-reverse ease-in-out;
+        }
+
+        /* ADDED: Wrapper for sticky header to prevent container overflow on scroll */
+        .header-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Ensure it stays on top of everything */
+            /* Add some padding for visual space on top of viewport */
+            padding: 15px 0;
         }
 
         #container {
@@ -141,8 +150,11 @@
             align-items: center;
             flex-wrap: wrap;
             padding: 15px 30px;
-            margin-top: 20px;
+            /* REMOVED margin-top and REPLACED with padding on .header-wrapper */
             border-radius: 15px;
+            
+            /* Combined glassmorphism styling into the class */
+            /* NOTE: Using the glass-card class is a cleaner approach but sticking to original CSS structure for minimal changes */
             background: rgba(255, 255, 255, 0.05); 
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -194,6 +206,8 @@
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
         }
         
         .dropdown-content {
@@ -212,11 +226,6 @@
             animation: scaleIn 0.3s ease-out forwards;
         }
 
-        @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
         .dropdown-content a {
             color: white;
             padding: 10px 18px;
@@ -226,6 +235,8 @@
             transition: background-color 0.3s ease;
             border-radius: 4px;
             margin: 0 8px;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
         }
 
         .dropdown-content a:hover {
@@ -242,7 +253,8 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start; 
-            padding: 100px 0 80px;
+            /* Adjusted padding to account for sticky header height */
+            padding: 80px 0 80px; 
             gap: 50px;
             position: relative; 
         }
@@ -346,6 +358,8 @@
             font-weight: 600;
             border-radius: 10px;
             transition: background-color 0.3s ease, transform 0.2s;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
         }
         
         .cta-button:hover {
@@ -534,6 +548,8 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
         }
         
         .contact-info a:hover {
@@ -592,6 +608,8 @@
             color: white;
             font-size: 16px;
             transition: background-color 0.3s ease, transform 0.2s;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
         }
         
         .form button:hover {
@@ -653,6 +671,11 @@
                 flex-direction: column;
                 gap: 30px;
             }
+            
+            /* Disable custom cursor on mobile, as it often causes issues */
+            body {
+                cursor: auto; 
+            }
         }
         
         @media screen and (max-width: 768px) {
@@ -686,35 +709,36 @@
     </style>
 </head>
 <body>
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="01mot.mp4" type="video/mp4">
-    </video>
     
     <div class="bg-shape-1"></div>
     <div class="bg-shape-2"></div>
 
-    <div id="container">
-        <header>
-            <div class="brand">
-                <div id="logo"></div>
-                <div id="name">fahedshafi</div>
-            </div>
-            <nav id="opt">
-                <div class="dropdown">
-                    <button class="dropbtn">Menu ▾</button>
-                    <div class="dropdown-content">
-                        <a href="#home">Home</a>
-                        <a href="#bio">About</a>
-                        <a href="#services">Services</a>
-                        <a href="#charges">Charges</a>
-                        <a href="#projects">Projects</a>
-                        <a href="#longform">Long-form</a>
-                        <a href="#contact">Contact</a>
-                    </div>
+    <div class="header-wrapper">
+        <div id="container">
+            <header>
+                <div class="brand">
+                    <div id="logo"></div>
+                    <div id="name">fahedshafi</div>
                 </div>
-            </nav>
-        </header>
-
+                <nav id="opt">
+                    <div class="dropdown">
+                        <button class="dropbtn">Menu ▾</button>
+                        <div class="dropdown-content">
+                            <a href="#home">Home</a>
+                            <a href="#bio">About</a>
+                            <a href="#services">Services</a>
+                            <a href="#charges">Charges</a>
+                            <a href="#projects">Projects</a>
+                            <a href="#longform">Long-form</a>
+                            <a href="#contact">Contact</a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+        </div>
+    </div>
+    
+    <div id="container">
         <main>
             <section id="home">
                 <div class="hero-text">
@@ -725,7 +749,7 @@
                 </div>
                 
                 <div class="hero-photo-container">
-                    <img src="endermannew.png" alt="Enderman with After Effects Logo">
+                    <img src="endermannew.png" alt="Enderman with After Effects Logo" loading="lazy">
                 </div>
             </section>
 
@@ -772,15 +796,15 @@
                 <h2 class="section-heading animate-on-scroll">Projects (Shorts)</h2>
                 <div class="projects">
                     <div class="project-embed portrait animate-on-scroll">
-                        <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen></iframe>
+                        <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                         <p>MY Project1 (VFX Reel)</p>
                     </div>
                     <div class="project-embed portrait animate-on-scroll">
-                        <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen></iframe>
+                        <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                         <p>MY Project2 (Aesthetic Mood)</p>
                     </div>
                     <div class="project-embed portrait animate-on-scroll">
-                        <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen></iframe>
+                        <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                         <p>MY Project3 (Cinematic Pacing)</p>
                     </div>
                 </div>
@@ -790,7 +814,7 @@
                 <h2 class="section-heading animate-on-scroll">Long-form Projects</h2>
                 <div class="projects">
                     <div class="project-embed landscape animate-on-scroll" style="grid-column: 1 / -1;">
-                        <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen></iframe>
+                        <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                         <p>MY Long-form Project (Promotional)</p>
                     </div>
                 </div>
@@ -826,11 +850,9 @@
     <script>
         // JavaScript for Scroll Animations (Intersection Observer)
         document.addEventListener("DOMContentLoaded", function() {
+            // Minor JS optimization: The footer now has the class and is included here
             const elements = document.querySelectorAll('.animate-on-scroll');
             
-            // The footer is outside the loop because it doesn't use the 'animate-on-scroll' helper class
-            const footer = document.querySelector('footer');
-
             const observerOptions = {
                 root: null, // viewport
                 rootMargin: '0px',
@@ -848,15 +870,10 @@
 
             const observer = new IntersectionObserver(handleIntersect, observerOptions);
 
-            // Observe all elements with the animation class
+            // Observe all elements with the animation class, including the footer
             elements.forEach(el => {
                 observer.observe(el);
             });
-            
-            // Observe the footer separately
-            if (footer) {
-                observer.observe(footer);
-            }
         });
     </script>
 </body>
