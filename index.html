@@ -20,8 +20,26 @@
             scroll-behavior: smooth;
         }
 
-        /* ---------------------- KEYFRAME ANIMATIONS ---------------------- */
-
+        /* ---------------------- CRITICAL 125% SCALE APPLIED HERE ---------------------- */
+        body {
+            background-color: #0d0a1f; 
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            background-image: radial-gradient(at 10% 15%, #1a1532, #0d0a1f 70%);
+            cursor: default; 
+            
+            /* --- 125% ZOOM ADDED --- */
+            zoom: 125%; 
+            -moz-transform: scale(1.25); 
+            -moz-transform-origin: 0 0;
+            /* ----------------------- */
+        }
+        
+        a, button, .dropbtn, .cta-button, input[type="submit"] {
+            cursor: pointer !important;
+        }
+        
         /* 1. Intro Animation */
         @keyframes slideInUp {
             from {
@@ -53,22 +71,6 @@
 
         /* ---------------------- STYLES ---------------------- */
 
-        body {
-            background-color: #0d0a1f; 
-            color: white;
-            overflow-x: hidden;
-            position: relative;
-            background-image: radial-gradient(at 10% 15%, #1a1532, #0d0a1f 70%);
-            /* REMOVED: cursor: url('MinecraftSword_00000.png'), auto; - Major Performance Fix */
-            cursor: default; 
-        }
-        
-        a, button, .dropbtn, .cta-button, input[type="submit"] {
-            cursor: pointer !important;
-        }
-        
-        /* REMOVED: .bg-shape-1 and .bg-shape-2 CSS blocks to remove floating animation and large blurred areas */
-
         .header-wrapper {
             position: sticky;
             top: 0;
@@ -87,7 +89,6 @@
         /* --- Glass Card Mixin (Optimized) --- */
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             border-radius: 12px;
@@ -110,7 +111,6 @@
             flex-wrap: wrap;
             padding: 15px 30px;
             background: rgba(255, 255, 255, 0.05); 
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             position: relative; 
@@ -222,7 +222,6 @@
             height: 350px;
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.05); 
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             overflow: hidden; 
@@ -334,7 +333,6 @@
             padding: 30px;
             /* Optimized glass-card mixin properties */
             background: rgba(255, 255, 255, 0.05);
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             border-radius: 12px;
@@ -366,7 +364,7 @@
         /* Project Cards - Video Optimization Styling */
         .projects {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             padding: 40px 0;
             margin-top: 20px;
@@ -376,7 +374,6 @@
         .project-embed {
             padding: 20px;
             background: rgba(255, 255, 255, 0.05); 
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             border-radius: 15px;
@@ -387,6 +384,11 @@
             opacity: 0;
             transform: translateY(30px) scale(0.95);
             transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            /* NEW: Set max-width for the embed container itself to control overall size */
+            max-width: 320px; 
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%; /* Important for centering in the grid */
         }
 
         .project-embed:hover {
@@ -403,14 +405,17 @@
             background-color: #000;
         }
 
+        /* --- SHORTS CONTAINER: 9:16 ASPECT RATIO (REDUCED SIZE) --- */
         .project-embed.portrait .video-container {
-            aspect-ratio: 9 / 16;
-            max-height: 450px;
+            aspect-ratio: 9 / 16; 
+            /* This height reduction, combined with the new max-width on .project-embed, 
+               correctly shrinks the video while preserving ratio. */
+            max-height: 340px; 
         }
-
+        /* --- LONG-FORM CONTAINER: 16:9 ASPECT RATIO (REDUCED SIZE) --- */
         .project-embed.landscape .video-container {
-            aspect-ratio: 16 / 9;
-            max-height: 300px;
+            aspect-ratio: 16 / 9; 
+            max-height: 225px; 
         }
 
         .project-embed iframe {
@@ -461,16 +466,23 @@
             font-size: 16px;
         }
 
-        /* Long-form projects grid adjustment */
+        /* Long-form projects grid adjustment (Desktop) */
         @media screen and (min-width: 1024px) {
             #longform .projects {
-                grid-template-columns: repeat(2, 1fr);
-                max-width: 900px;
+                /* Reduced max-width for tighter layout */
+                max-width: 700px; 
                 margin-left: auto;
                 margin-right: auto;
+                /* Forces single column display for long-form, making them look proportional */
+                grid-template-columns: 1fr; 
             }
-            #longform .project-embed.landscape {
-                grid-column: span 2;
+            /* Remove the per-item max-width here to let long-form fill the grid slot (700px) */
+            #longform .project-embed {
+                max-width: 100%; 
+            }
+            /* Ensure the video container itself still respects the reduced max height */
+            #longform .project-embed.landscape .video-container {
+                max-height: 225px;
             }
         }
 
@@ -489,7 +501,6 @@
             flex: 1;
             /* Optimized glass-card mixin properties */
             background: rgba(255, 255, 255, 0.05);
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             border-radius: 12px;
@@ -528,7 +539,6 @@
             padding: 30px;
             /* Optimized glass-card mixin properties */
             background: rgba(255, 255, 255, 0.05);
-            /* REMOVED: backdrop-filter: blur(10px); - Major Performance Fix */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             border-radius: 12px;
@@ -665,8 +675,9 @@
                 grid-template-columns: 1fr;
             }
             
+            /* Smaller max height on small screens */
             .project-embed.landscape .video-container {
-                max-height: 200px;
+                max-height: 200px; 
             }
         }
     </style>
@@ -771,10 +782,52 @@
                     </div>
                     <div class="project-embed portrait animate-on-scroll">
                         <div class="video-container">
-                             <div class="video-placeholder" data-src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview"></div>
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview"></div>
                             <iframe data-src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                         </div>
                         <p>MY Project3 (Cinematic Pacing)</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1C5Vqu8wEANeAxAg29jVQ1_BSSDLfAD8d/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1C5Vqu8wEANeAxAg29jVQ1_BSSDLfAD8d/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>MOTIONGRAPHICS</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1iImOhdfs4GTDDwxRucTwM642eqROmLuQ/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1iImOhdfs4GTDDwxRucTwM642eqROmLuQ/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>FUNFACT-[1]</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/12m3_NAxxYbp1pH_bV42ZYsosRLTnkCi_/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/12m3_NAxxYbp1pH_bV42ZYsosRLTnkCi_/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>PROMOTIONAL-[1]</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/18z3XIqQ3pmnnk_PAVrUsZiyKFZ8b23bO/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/18z3XIqQ3pmnnk_PAVrUsZiyKFZ8b23bO/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>PROMOTIONAL-[2]</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1duNhvUk7sPNQjsEGWAOIT78a1Xpm7G7a/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1duNhvUk7sPNQjsEGWAOIT78a1Xpm7G7a/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>MOTIONGRAPHICS-[2]</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/12Q7dyXSzdDWAW04iubSkJtEJzmZ7_T60/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/12Q7dyXSzdDWAW04iubSkJtEJzmZ7_T60/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>FUNFACT-[2]</p>
                     </div>
                 </div>
             </section>
@@ -782,12 +835,26 @@
             <section id="longform">
                 <h2 class="section-heading animate-on-scroll">Long-form Projects</h2>
                 <div class="projects">
-                    <div class="project-embed landscape animate-on-scroll" style="grid-column: 1 / -1;">
+                    <div class="project-embed landscape animate-on-scroll">
                         <div class="video-container">
-                             <div class="video-placeholder" data-src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview"></div>
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview"></div>
                             <iframe data-src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                         </div>
                         <p>MY Long-form Project (Promotional)</p>
+                    </div>
+                    <div class="project-embed landscape animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/12exKz3nGXpz_MGhgATTMZEOaa7zEVUqt/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/12exKz3nGXpz_MGhgATTMZEOaa7zEVUqt/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>YT-[GROWINGCHANNEL]</p>
+                    </div>
+                    <div class="project-embed landscape animate-on-scroll">
+                        <div class="video-container">
+                            <div class="video-placeholder" data-src="https://drive.google.com/file/d/1Guq9ugl8PJ-35t3XUKiv9GB01VOHdlMx/preview"></div>
+                            <iframe data-src="https://drive.google.com/file/d/1Guq9ugl8PJ-35t3XUKiv9GB01VOHdlMx/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p>ADVERTISEMENT</p>
                     </div>
                 </div>
             </section>
