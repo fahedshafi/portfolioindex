@@ -1,277 +1,880 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> – eCommerce</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Fahed Shafi - Editor Portfolio (Glassmorphism)</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Global Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
 
-    body {
-      background-color: #000;
-      color: #eee;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+        /* ---------------------- KEYFRAME ANIMATIONS ---------------------- */
 
-    header {
-      background-color: #111;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        /* 1. Intro Animation */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #8FBC8F;
-    }
+        /* 2. Scroll Animation Class */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
 
-    nav ul {
-      display: flex;
-      gap: 20px;
-      list-style: none;
-    }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
 
-    nav ul li a {
-      color: #eee;
-      font-weight: 500;
-      transition: 0.3s;
-    }
+        /* 3. Floating Background */
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, 10px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
 
-    nav ul li a:hover {
-      color: #8FBC8F;
-    }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
 
-    .hero {
-      background: url('https://via.placeholder.com/1600x500') center/cover no-repeat;
-      height: 60vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-    }
+        /* ---------------------- STYLES ---------------------- */
 
-    .hero h1 {
-      font-size: 3rem;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 1rem 2rem;
-      border-radius: 8px;
-    }
+        body {
+            background-color: #0d0a1f; 
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            /* PERFORMANCE FIX: Static background gradient replacing the video */
+            background-image: radial-gradient(at 10% 15%, #1a1532, #0d0a1f 70%);
+            
+            /* CUSTOM CURSOR: CHECK IMAGE SIZE AND PATH */
+            /* The image path is correctly set to 'custom-cursor.png' */
+            cursor: url('MinecraftSword_00000.png'), auto; 
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
+        /* Abstract background shapes/gradients */
+        .bg-shape-1 {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#5d3fd3, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: -1;
+            /* Apply float animation */
+            animation: float 15s infinite alternate ease-in-out;
+        }
 
-    .section-title {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      color: #8FBC8F;
-      text-align: center;
-    }
+        .bg-shape-2 {
+            position: fixed;
+            bottom: 5%;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(#1aa7ec, transparent 70%);
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.5;
+            z-index: -1;
+            /* Apply float animation (with delay/different timing) */
+            animation: float 20s infinite alternate-reverse ease-in-out;
+        }
 
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-    }
+        /* ADDED: Wrapper for sticky header to prevent container overflow on scroll */
+        .header-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Ensure it stays on top of everything */
+            /* Add some padding for visual space on top of viewport */
+            padding: 15px 0;
+        }
 
-    .product-card {
-      background-color: #111;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s;
-      border: 1px solid #8FBC8F22;
-    }
+        #container {
+            max-width: 1400px; 
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1; 
+        }
+        
+        /* --- Glassmorphism Mixin --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            
+            /* Enable 3D transform on glass cards for tilt effect */
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* 4. Glass Card Tilt Effect */
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
 
-    .product-card:hover {
-      transform: translateY(-5px);
-    }
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 15px 30px;
+            /* REMOVED margin-top and REPLACED with padding on .header-wrapper */
+            border-radius: 15px;
+            
+            /* Combined glassmorphism styling into the class */
+            /* NOTE: Using the glass-card class is a cleaner approach but sticking to original CSS structure for minimal changes */
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            position: relative; 
+            z-index: 100; 
+            
+            /* Intro Animation for Header */
+            animation: slideInUp 0.6s ease-out 0.2s backwards;
+        }
 
-    .product-card img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-    }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 20px; 
+        }
 
-    .product-info {
-      padding: 20px;
-      text-align: center;
-    }
+        #logo {
+            background-image: url('fahedshafi.png'); 
+            border: 3px solid #5d3fd3; 
+            border-radius: 50%;
+            height: 55px; 
+            width: 55px; 
+            background-size: cover; 
+            background-repeat: no-repeat;
+            background-position: center;
+        }
 
-    .product-info h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
+        #name {
+            font-size: 26px; 
+            font-weight: 700;
+            color: #e0e0e0;
+        }
 
-    .price {
-      color: #8FBC8F;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
+        /* Dropdown specific styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 101; 
+        }
 
-    .btn {
-      background-color: #8FBC8F;
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+        .dropbtn {
+            background-color: #5d3fd3;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1532;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
+            z-index: 1000; 
+            border-radius: 10px;
+            right: 0;
+            padding: 5px 0;
+            border: 1px solid rgba(93, 63, 211, 0.3);
+            /* Add animation for dropdown appearance */
+            transform-origin: top right;
+            animation: scaleIn 0.3s ease-out forwards;
+        }
 
-    .btn:hover {
-      background-color: #70a470;
-    }
+        .dropdown-content a {
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+            margin: 0 8px;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
+        }
 
-    footer {
-      background-color: #111;
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9rem;
-      color: #aaa;
-      margin-top: 40px;
-    }
+        .dropdown-content a:hover {
+            background-color: #5d3fd3;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* End Dropdown specific styles */
 
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2rem;
-        padding: 1rem;
-      }
-    }
-  </style>
+        /* Hero Section (Home) */
+        #home {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; 
+            /* Adjusted padding to account for sticky header height */
+            padding: 80px 0 80px; 
+            gap: 50px;
+            position: relative; 
+        }
+        
+        .hero-text {
+            max-width: 60%;
+            position: relative;
+            z-index: 60; 
+        }
+        
+        /* Apply Intro Animation to Hero Text */
+        .hero-text div:nth-child(1) { animation: slideInUp 0.8s ease-out 0.4s backwards; }
+        .hero-text div:nth-child(2) { animation: slideInUp 0.8s ease-out 0.5s backwards; }
+        .hero-text p { animation: slideInUp 0.8s ease-out 0.6s backwards; }
+        .hero-text a { animation: slideInUp 0.8s ease-out 0.7s backwards; }
+        
+        /* Hero Photo Container - Now directly holding the new image */
+        .hero-photo-container {
+            position: relative; /* Keep relative for ::before pseudo-element */
+            width: 300px;
+            height: 350px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            overflow: hidden; /* Crucial to clip the image within the container */
+            z-index: 50; /* Base z-index */
+            
+            /* Positioning on Desktop */
+            right: 30px; 
+            top: 80px;
+            position: absolute; /* Revert to absolute for desktop positioning */
+
+            /* Apply glass-card mixin properties */
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.3s ease;
+            
+            /* Intro Animation for Card */
+            animation: slideInUp 0.8s ease-out 0.8s backwards;
+        }
+        
+        /* 4. Tilt effect for hero card */
+        .hero-photo-container:hover {
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+
+        .hero-photo-container::before {
+            content: "AVAILABLE FOR PROJECTS";
+            position: absolute;
+            top: 20px;
+            left: -50px;
+            background-color: #5d3fd3;
+            color: white;
+            padding: 5px 50px;
+            font-size: 12px;
+            font-weight: bold;
+            transform: rotate(-45deg);
+            transform-origin: 0 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 52; /* Ensure ribbon is on top */
+        }
+
+        /* Direct image styling within the container */
+        .hero-photo-container img {
+            width: 115%; /* Make image fit container width */
+            height: 115%; /* Adjust height proportionally */
+            display: block; /* Remove extra space below image */
+            object-fit: contain; /* Ensure the whole image is visible, scale down if needed */
+            object-position: center bottom; /* Position the Enderman at the bottom of the container */
+            transform: translateY(-40px); /* Adjust vertical position to show the top of the AE logo */
+            transform: translateX(-10px);
+            z-index: 51; /* Image slightly above the card for a subtle layered look */
+            position: relative; /* Needed for z-index to work against ::before */
+        }
+        
+        .headline {
+            margin-top: 0;
+            font-size: 60px; 
+            font-weight: 800;
+            line-height: 1.1;
+            text-align: left;
+        }
+
+        .highlight {
+            color: #5d3fd3;
+            font-size: 85px;
+            font-weight: 900;
+            margin-top: -20px;
+            text-align: left;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 35px;
+            background-color: #5d3fd3; 
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background-color: #bf00ff;
+            transform: translateY(-2px);
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-top: 120px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #5d3fd3;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Text/Info Cards (Bio, Services, Charges) */
+        .info-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 30px;
+            margin: 50px auto;
+            max-width: 1200px;
+        }
+
+        .info-card {
+            padding: 30px;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .info-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+
+        .info-card h3 {
+            color: #5d3fd3;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .info-card p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #ccc;
+            font-weight: 400;
+        }
+        
+        /* Project Cards */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .project-embed {
+            padding: 20px;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            /* Apply Scroll Animation class */
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .project-embed:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(93, 63, 211, 0.5);
+        }
+
+        .project-embed iframe {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            background-color: #000;
+        }
+
+        .project-embed.portrait iframe {
+            aspect-ratio: 9 / 16;
+            max-height: 450px;
+        }
+
+        .project-embed.landscape iframe {
+            aspect-ratio: 16 / 9;
+            max-height: 300px;
+        }
+        
+        .project-embed p {
+            font-weight: 600;
+            margin-top: 15px;
+            color: #1aa7ec; 
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Long-form projects grid adjustment */
+        @media screen and (min-width: 1024px) {
+            #longform .projects {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 900px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #longform .project-embed.landscape {
+                grid-column: span 2;
+            }
+        }
+
+        /* Contact Form & Info */
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+            padding: 40px 0;
+            max-width: 1000px;
+            margin: 50px auto;
+            align-items: flex-start;
+        }
+
+        .contact-info {
+            flex: 1;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            padding: 30px;
+        }
+        
+        .contact-info:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+        
+        .contact-info p {
+            font-size: 18px;
+            font-weight: 400;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info a {
+            color: #1aa7ec;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
+        }
+        
+        .contact-info a:hover {
+            color: #7b58f8;
+        }
+        
+        .form {
+            flex: 1;
+            padding: 30px;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .form:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+
+        .form input, .form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            color: white;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form input:focus, .form textarea:focus {
+            outline: none;
+            border-color: #5d3fd3;
+        }
+        
+        .form textarea {
+            resize: vertical;
+        }
+
+        .form button {
+            padding: 12px 30px;
+            background-color: #5d3fd3;
+            border: none;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            /* Use default pointer for interactive element */
+            cursor: pointer;
+        }
+        
+        .form button:hover {
+            background-color: #7b58f8;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+            color: #777;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            /* Apply scroll animation class */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* Media Queries (Updated for Enderman Fix + Animations) */
+        @media screen and (max-width: 1000px) {
+            #home {
+                flex-direction: column;
+                align-items: center;
+                padding-bottom: 50px; /* Reduced padding as image is contained */
+            }
+            
+            .hero-text {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .headline, .highlight {
+                text-align: center;
+            }
+            
+            /* Mobile Positioning for hero-photo-container */
+            .hero-photo-container {
+                position: relative; /* Change to relative for stacking */
+                margin-top: 40px; /* Space from text */
+                right: auto;
+                top: auto;
+                /* Remove hover tilt on mobile to prevent accidental scrolls/flickers */
+                transform: none;
+            }
+            
+            .hero-photo-container img {
+                object-fit: contain; /* Ensure it fits */
+                object-position: center bottom;
+                transform: translateY(10px); /* Adjust to show logo */
+            }
+            
+            .info-card-grid {
+                padding: 0 10px;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            /* Disable custom cursor on mobile, as it often causes issues */
+            body {
+                cursor: auto; 
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                border-radius: 0;
+            }
+            
+            .headline {
+                font-size: 40px;
+            }
+
+            .highlight {
+                font-size: 60px;
+            }
+            
+            .section-heading {
+                font-size: 30px;
+            }
+            
+            .projects {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-embed.landscape iframe {
+                max-height: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
+    
+    <div class="bg-shape-1"></div>
+    <div class="bg-shape-2"></div>
 
-  <header>
-    <div class="logo">BMHS Anantnag</div>
-    <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Cart</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <h1>Shop Smart. Shop Best</h1>
-  </section>
-
-  <section class="container">
-    <h2 class="section-title">Featured Products</h2>
-    <div class="product-grid">
-      <!-- Product 1 -->
-      <div class="product-card">
-        <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQ0ikjaYdbsicWBn0MtJJsxaW9tok_O6Gt9IIs5JUzHIgpvFd4zhrOp7VSxqjspp5OOISXyBpiEclofiaEeM7xIrBFmN2UeqjtX83ucUWqU-0sBGSjEOioSvg" alt="Product 1">
-        <div class="product-info">
-          <h3>Wireless Headphones</h3>
-          <p class="price">$49.99</p>
-          <button class="btn">Add to Cart</button>
+    <div class="header-wrapper">
+        <div id="container">
+            <header>
+                <div class="brand">
+                    <div id="logo"></div>
+                    <div id="name">fahedshafi</div>
+                </div>
+                <nav id="opt">
+                    <div class="dropdown">
+                        <button class="dropbtn">Menu ▾</button>
+                        <div class="dropdown-content">
+                            <a href="#home">Home</a>
+                            <a href="#bio">About</a>
+                            <a href="#services">Services</a>
+                            <a href="#charges">Charges</a>
+                            <a href="#projects">Projects</a>
+                            <a href="#longform">Long-form</a>
+                            <a href="#contact">Contact</a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
         </div>
-      </div>
-      <!-- Product 2 -->
-      <div class="product-card">
-        <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcT--NG26Op5kEIo96g8VprL-6yF8pFqblZ1W9V-Q0yiWn4x1zvCYqRUfMyRDVjiWL1Dh_ZYfCUHXggTEpW1GrQ6ZB6jRGvQ4I0QByEPLCTpxNg5tSjgsc-KBqHEUfdA0b1KLUPJkQ&usqp=CAc" alt="Product 2">
-        <div class="product-info">
-          <h3>Smart Watch</h3>
-          <p class="price">$89.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 3 -->
-      <div class="product-card">
-        <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQXnpKjEdhyhigv7ryR9r9GpCUzRpbJra9uzciLCjrgDwhB07Qx6OGPp5dmVvs6DIECQqHtf2FS8PmK-ZJRb5PnCJga5mslU72AbR0xdTnPZHtl7UTLBKIR30HkAdDFVqtCUi7Ndbo&usqp=CAc" alt="Product 3">
-        <div class="product-info">
-          <h3>Bluetooth Speaker</h3>
-          <p class="price">$29.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 4 -->
-      <div class="product-card">
-        <img src="data:image/webp;base64,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" alt="Product 4">
-        <div class="product-info">
-          <h3>Fitness Tracker</h3>
-          <p class="price">$39.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 5 -->
-      <div class="product-card">
-        <img src="https://m.media-amazon.com/images/I/71vm32j2InL.jpg" alt="Product 5">
-        <div class="product-info">
-          <h3>Gaming Mouse</h3>
-          <p class="price">$24.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 6 -->
-      <div class="product-card">
-        <img src="https://shop.zebronics.com/cdn/shop/products/Zeb-MAx-Ninja-pic2_679cd4ad-5ca9-49ca-bd7f-7beec6916e87.jpg?v=1680686603&width=800" alt="Product 6">
-        <div class="product-info">
-          <h3>LED Keyboard</h3>
-          <p class="price">$34.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 7 -->
-      <div class="product-card">
-        <img src="https://mm.digikey.com/Volume0/opasdata/d220001/derivates/1/003/223/207/USB-HUB_sml%28200x200%29.jpg" alt="Product 7">
-        <div class="product-info">
-          <h3>USB Hub</h3>
-          <p class="price">$14.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 8 -->
-      <div class="product-card">
-        <img src="https://chargingcable.in/cdn/shop/files/moto68wcharger.jpg?v=1750679937&width=1225" alt="Product 8">
-        <div class="product-info">
-          <h3>Portable Charger</h3>
-          <p class="price">$19.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 9 -->
-      <div class="product-card">
-        <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQB-t3RSibOtkDh2_KwxBRGH9sZwgYzRjd6FTYGYlyEfR50bd85LvWOl-jRNXDSr3k1FL7ZjcTF2CrEZOuzi4J5_qG56oKNkLLZseQFe6mjTWDEWY82WPe4vpY" alt="Product 9">
-        <div class="product-info">
-          <h3>Laptop Stand</h3>
-          <p class="price">$22.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
-      <!-- Product 10 -->
-      <div class="product-card">
-        <img src="https://rukminim2.flixcart.com/image/832/832/xif0q/microphone/w/m/5/wireless-mic-cancellation-mic-for-youtube-vlogging-recording-for-original-imahd5y4shx3yqgt.jpeg?q=70&crop=false" alt="Product 10">
-        <div class="product-info">
-          <h3>Noise Cancelling Mic</h3>
-          <p class="price">$59.99</p>
-          <button class="btn">Add to Cart</button>
-        </div>
-      </div>
     </div>
-  </section>
+    
+    <div id="container">
+        <main>
+            <section id="home">
+                <div class="hero-text">
+                    <div class="headline">Hi, I'm An Editor</div>
+                    <div class="highlight">Fahed</div>
+                    <p style="font-size: 18px; margin-top: 20px; color: #ccc;">Passionate After Effects editor specializing in cinematic, minimalistic reels and high-impact social media content.</p>
+                    <a href="#contact" class="cta-button">Hire Me Now</a>
+                </div>
+                
+                <div class="hero-photo-container">
+                    <img src="endermannew.png" alt="Enderman with After Effects Logo" loading="lazy">
+                </div>
+            </section>
 
-  <footer>
-    &copy; 2025 SHAYIQ. All rights reserved.
-  </footer>
+            <section id="bio">
+                <h2 class="section-heading animate-on-scroll">About Myself</h2>
+                <div class="info-card-grid">
+                    <div class="info-card animate-on-scroll" style="grid-column: span 2;">
+                        <h3>My Vision</h3>
+                        <p>I'm a passionate video editor working with **After Effects 2024**, specializing in creating minimalistic yet eye-catching edits that leave a lasting impression. My style focuses on clean transitions, smooth pacing, and a sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube, and reels.</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>Core Skills</h3>
+                        <p>Cinematic Montages, VFX Transitions, Typography Animations, Motion Tracking, Visual Enhancements, and color grading for a polished, emotional final look.</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>My Goal</h3>
+                        <p>I always aim to bring creativity, emotion, and clarity into every frame. Whether it's a brand video, a content creator reel, or a personal project, I give it my full attention and polish. Let's create something that not only looks good — but feels powerful too.</p>
+                    </div>
+                </div>
+            </section>
 
+            <section id="services">
+                <h2 class="section-heading animate-on-scroll">Services & Rates</h2>
+                <div class="info-card-grid">
+                    <div class="info-card animate-on-scroll">
+                        <h3>Reels & Shorts (60s)</h3>
+                        <p>Creation of fast-paced, high-impact short-form videos optimized for Instagram, TikTok, and YouTube Shorts. Perfect for content creators and brands.</p>
+                        <p style="margin-top: 15px; color: #1aa7ec;">**$5–$20 per edit** (Based on complexity)</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>Long-form Videos</h3>
+                        <p>Full-length YouTube videos, promotional videos, and detailed cinematic projects requiring in-depth pacing and storytelling. Perfect for extended content.</p>
+                        <p style="margin-top: 15px; color: #1aa7ec;">**Custom Quote Required** (Discuss via call/chat)</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>Advanced VFX & Motion</h3>
+                        <p>Includes complex After Effects work such as detailed typography, advanced motion tracking, dynamic masking, and custom particle effects for a premium look.</p>
+                        <p style="margin-top: 15px; color: #1aa7ec;">**Add-on Service**</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects">
+                <h2 class="section-heading animate-on-scroll">Projects (Shorts)</h2>
+                <div class="projects">
+                    <div class="project-embed portrait animate-on-scroll">
+                        <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <p>MY Project1 (VFX Reel)</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <p>MY Project2 (Aesthetic Mood)</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <p>MY Project3 (Cinematic Pacing)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="longform">
+                <h2 class="section-heading animate-on-scroll">Long-form Projects</h2>
+                <div class="projects">
+                    <div class="project-embed landscape animate-on-scroll" style="grid-column: 1 / -1;">
+                        <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
+                        <p>MY Long-form Project (Promotional)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <h2 class="section-heading animate-on-scroll">Get in Touch</h2>
+                <div class="contact-container">
+                    <div class="contact-info animate-on-scroll">
+                        <h3>Let's Collaborate</h3>
+                        <p>Ready to turn your raw footage into an eye-catching masterpiece? Contact me using the form or connect through my social channels. I usually reply within 24 hours.</p>
+                        <p>Email: <a href="mailto:fahadshafisheikh@outlook.com">fahadshafisheikh@outlook.com</a></p>
+                        <p>Instagram: <a href="https://www.instagram.com/fahedshafi" target="_blank">@fahedshafi</a></p>
+                    </div>
+                    
+                    <form action="https://formsubmit.co/fahadshafisheikh@outlook.com" method="POST" class="form animate-on-scroll">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_honey" style="display:none">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer class="animate-on-scroll">
+            &copy; 2025 Fahed Shafi. All rights reserved. Built with the **Glassmorphism** style.
+        </footer>
+    </div>
+    
+    <script>
+        // JavaScript for Scroll Animations (Intersection Observer)
+        document.addEventListener("DOMContentLoaded", function() {
+            // Minor JS optimization: The footer now has the class and is included here
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the item is visible
+            };
+
+            function handleIntersect(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once it's visible
+                    }
+                });
+            }
+
+            const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+            // Observe all elements with the animation class, including the footer
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
