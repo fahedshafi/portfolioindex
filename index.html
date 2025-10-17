@@ -1,405 +1,863 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fahed Shafi - Editor Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Fahed Shafi - Editor Portfolio (Glassmorphism)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Global Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
 
-    html {
-      scroll-behavior: smooth;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    body {
-      background-color: black;
-      color: white;
-      overflow-x: hidden;
-      position: relative;
-    }
+        /* ---------------------- KEYFRAME ANIMATIONS ---------------------- */
 
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100dvh;
-      object-fit: cover;
-      z-index: -1;
-      filter: brightness(0.5);
-      pointer-events: none;
-    }
+        /* 1. Intro Animation */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      padding: 20px;
-    }
+        /* 2. Scroll Animation Class */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
 
-    #logo {
-      background-image: url('ME2.png');
-      border: 2px solid #1aa7ec;
-      border-radius: 50%;
-      height: 60px;
-      width: 60px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+        /* 3. Floating Background */
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, 10px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
 
-    #name {
-      font-size: 28px;
-      font-weight: bold;
-    }
+        /* ---------------------- STYLES ---------------------- */
 
-    nav#opt {
-      position: relative;
-    }
+        body {
+            background-color: #0d0a1f; 
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
+        /* Background Video & Overlays (Critical for Glass Effect) */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            object-fit: cover;
+            z-index: -2; 
+            filter: brightness(0.4) saturate(1.2); 
+            pointer-events: none;
+        }
 
-    .dropbtn {
-      background-color: #1aa7ec;
-      color: black;
-      padding: 10px 16px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+        /* Abstract background shapes/gradients */
+        .bg-shape-1 {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#5d3fd3, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: -1;
+            /* Apply float animation */
+            animation: float 15s infinite alternate ease-in-out;
+        }
 
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #111;
-      min-width: 160px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-      z-index: 1000;
-      border-radius: 8px;
-      right: 0;
-    }
+        .bg-shape-2 {
+            position: fixed;
+            bottom: 5%;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(#1aa7ec, transparent 70%);
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.5;
+            z-index: -1;
+            /* Apply float animation (with delay/different timing) */
+            animation: float 20s infinite alternate-reverse ease-in-out;
+        }
 
-    .dropdown-content a {
-      color: white;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      font-weight: 500;
-    }
+        #container {
+            max-width: 1400px; 
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1; 
+        }
+        
+        /* --- Glassmorphism Mixin --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            
+            /* Enable 3D transform on glass cards for tilt effect */
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* 4. Glass Card Tilt Effect */
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
 
-    .dropdown-content a:hover {
-      background-color: #1aa7ec;
-      color: black;
-    }
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 15px 30px;
+            margin-top: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            position: relative; 
+            z-index: 100; 
+            
+            /* Intro Animation for Header */
+            animation: slideInUp 0.6s ease-out 0.2s backwards;
+        }
 
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 20px; 
+        }
 
-    .headline {
-      margin-top: 80px;
-      font-size: 50px;
-      font-weight: bold;
-      padding-left: 20px;
-    }
+        #logo {
+            background-image: url('fahedshafi.png'); 
+            border: 3px solid #5d3fd3; 
+            border-radius: 50%;
+            height: 55px; 
+            width: 55px; 
+            background-size: cover; 
+            background-repeat: no-repeat;
+            background-position: center;
+        }
 
-    .highlight {
-      color: #1aa7ec;
-      font-size: 80px;
-      font-weight: bold;
-      padding-left: 20px;
-    }
+        #name {
+            font-size: 26px; 
+            font-weight: 700;
+            color: #e0e0e0;
+        }
 
-    .section-heading {
-      font-size: 36px;
-      font-weight: 700;
-      color: #1aa7ec;
-      padding-left: 20px;
-      margin-top: 60px;
-    }
+        /* Dropdown specific styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 101; 
+        }
 
-    .bio, .services {
-      margin-top: 20px;
-      font-size: 18px;
-      line-height: 1.6;
-      padding: 0 20px;
-      max-width: 800px;
-      font-weight: 700;
-    }
+        .dropbtn {
+            background-color: #5d3fd3;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1532;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
+            z-index: 1000; 
+            border-radius: 10px;
+            right: 0;
+            padding: 5px 0;
+            border: 1px solid rgba(93, 63, 211, 0.3);
+            /* Add animation for dropdown appearance */
+            transform-origin: top right;
+            animation: scaleIn 0.3s ease-out forwards;
+        }
 
-    .projects {
-      display: flex;
-      gap: 30px;
-      padding: 40px 20px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-    }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
 
-    .project-embed {
-      min-width: 280px;
-      background-color: #111;
-      border: 2px solid #1aa7ec;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 0 10px #000;
-      flex-shrink: 0;
-    }
+        .dropdown-content a {
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+            margin: 0 8px;
+        }
 
-    .project-embed iframe {
-      height: 100%;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-    }
+        .dropdown-content a:hover {
+            background-color: #5d3fd3;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* End Dropdown specific styles */
 
-    /* Portrait Shorts */
-    .project-embed.portrait iframe {
-      aspect-ratio: 9 / 16;
-    }
+        /* Hero Section (Home) */
+        #home {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; 
+            padding: 100px 0 80px;
+            gap: 50px;
+            position: relative; 
+        }
+        
+        .hero-text {
+            max-width: 60%;
+            position: relative;
+            z-index: 60; 
+        }
+        
+        /* Apply Intro Animation to Hero Text */
+        .hero-text div:nth-child(1) { animation: slideInUp 0.8s ease-out 0.4s backwards; }
+        .hero-text div:nth-child(2) { animation: slideInUp 0.8s ease-out 0.5s backwards; }
+        .hero-text p { animation: slideInUp 0.8s ease-out 0.6s backwards; }
+        .hero-text a { animation: slideInUp 0.8s ease-out 0.7s backwards; }
+        
+        /* Hero Photo Container - Now directly holding the new image */
+        .hero-photo-container {
+            position: relative; /* Keep relative for ::before pseudo-element */
+            width: 300px;
+            height: 350px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            overflow: hidden; /* Crucial to clip the image within the container */
+            z-index: 50; /* Base z-index */
+            
+            /* Positioning on Desktop */
+            right: 30px; 
+            top: 80px;
+            position: absolute; /* Revert to absolute for desktop positioning */
 
-    /* Landscape Long-form */
-    .project-embed.landscape iframe {
-      aspect-ratio: 16 / 9;
-    }
+            /* Apply glass-card mixin properties */
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.3s ease;
+            
+            /* Intro Animation for Card */
+            animation: slideInUp 0.8s ease-out 0.8s backwards;
+        }
+        
+        /* 4. Tilt effect for hero card */
+        .hero-photo-container:hover {
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
 
-    /* Make long-form projects 3x bigger on large screens */
-    @media screen and (min-width: 1024px) {
-      .project-embed.landscape {
-        min-width: 840px; /* 280px × 3 */
-      }
-    }
+        .hero-photo-container::before {
+            content: "AVAILABLE FOR PROJECTS";
+            position: absolute;
+            top: 20px;
+            left: -50px;
+            background-color: #5d3fd3;
+            color: white;
+            padding: 5px 50px;
+            font-size: 12px;
+            font-weight: bold;
+            transform: rotate(-45deg);
+            transform-origin: 0 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 52; /* Ensure ribbon is on top */
+        }
 
-    .project-embed p {
-      font-weight: 600;
-      margin-top: 10px;
-      color: #1aa7ec;
-      text-align: center;
-    }
+        /* Direct image styling within the container */
+        .hero-photo-container img {
+            width: 115%; /* Make image fit container width */
+            height: 115%; /* Adjust height proportionally */
+            display: block; /* Remove extra space below image */
+            object-fit: contain; /* Ensure the whole image is visible, scale down if needed */
+            object-position: center bottom; /* Position the Enderman at the bottom of the container */
+            transform: translateY(-40px); /* Adjust vertical position to show the top of the AE logo */
+            transform: translateX(-10px);
+            z-index: 51; /* Image slightly above the card for a subtle layered look */
+            position: relative; /* Needed for z-index to work against ::before */
+        }
+        
+        .headline {
+            margin-top: 0;
+            font-size: 60px; 
+            font-weight: 800;
+            line-height: 1.1;
+            text-align: left;
+        }
 
-    .contact {
-      margin-top: 50px;
-      padding: 20px;
-    }
+        .highlight {
+            color: #5d3fd3;
+            font-size: 85px;
+            font-weight: 900;
+            margin-top: -20px;
+            text-align: left;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 35px;
+            background-color: #5d3fd3; 
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+        
+        .cta-button:hover {
+            background-color: #bf00ff;
+            transform: translateY(-2px);
+        }
 
-    .contact p, .contact a {
-      font-size: 18px;
-      font-weight: 600;
-      color: white;
-      display: block;
-      margin-bottom: 10px;
-      text-decoration: none;
-    }
+        /* Section Headings */
+        .section-heading {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-top: 120px;
+            margin-bottom: 50px;
+            position: relative;
+        }
 
-    form.form {
-      margin-top: 30px;
-      padding: 20px;
-      max-width: 500px;
-    }
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #5d3fd3;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
 
-    .form input, .form textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
+        /* Text/Info Cards (Bio, Services, Charges) */
+        .info-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 30px;
+            margin: 50px auto;
+            max-width: 1200px;
+        }
 
-    .form button {
-      padding: 12px 30px;
-      background-color: #1aa7ec;
-      border: none;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      color: black;
-    }
+        .info-card {
+            padding: 30px;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .info-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: #aaa;
-      margin-top: 50px;
-    }
+        .info-card h3 {
+            color: #5d3fd3;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .info-card p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #ccc;
+            font-weight: 400;
+        }
+        
+        /* Project Cards */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+            margin-top: 20px;
+            justify-content: center;
+        }
 
-    @media screen and (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-      }
+        .project-embed {
+            padding: 20px;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            /* Apply Scroll Animation class */
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
 
-      .brand {
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
+        .project-embed:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(93, 63, 211, 0.5);
+        }
 
-      #name {
-        font-size: 24px;
-      }
+        .project-embed iframe {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            background-color: #000;
+        }
 
-      .headline {
-        font-size: 32px;
-        text-align: center;
-        margin-top: 50px;
-        padding: 0;
-      }
+        .project-embed.portrait iframe {
+            aspect-ratio: 9 / 16;
+            max-height: 450px;
+        }
 
-      .highlight {
-        font-size: 50px;
-        text-align: center;
-        padding: 0;
-      }
+        .project-embed.landscape iframe {
+            aspect-ratio: 16 / 9;
+            max-height: 300px;
+        }
+        
+        .project-embed p {
+            font-weight: 600;
+            margin-top: 15px;
+            color: #1aa7ec; 
+            text-align: center;
+            font-size: 16px;
+        }
 
-      .section-heading, .bio, .services, .contact, .form {
-        padding-left: 10px;
-        padding-right: 10px;
-        text-align: center;
-      }
+        /* Long-form projects grid adjustment */
+        @media screen and (min-width: 1024px) {
+            #longform .projects {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 900px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #longform .project-embed.landscape {
+                grid-column: span 2;
+            }
+        }
 
-      .projects {
-        padding: 20px 10px;
-        gap: 16px;
-      }
+        /* Contact Form & Info */
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+            padding: 40px 0;
+            max-width: 1000px;
+            margin: 50px auto;
+            align-items: flex-start;
+        }
 
-      .project-embed {
-        min-width: 240px;
-      }
-    }
-  </style>
+        .contact-info {
+            flex: 1;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            padding: 30px;
+        }
+        
+        .contact-info:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+        
+        .contact-info p {
+            font-size: 18px;
+            font-weight: 400;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info a {
+            color: #1aa7ec;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-info a:hover {
+            color: #7b58f8;
+        }
+        
+        .form {
+            flex: 1;
+            padding: 30px;
+            /* Apply glass-card mixin */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .form:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            transform: rotateX(1deg) rotateY(1deg) scale(1.01);
+        }
+
+        .form input, .form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            color: white;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form input:focus, .form textarea:focus {
+            outline: none;
+            border-color: #5d3fd3;
+        }
+        
+        .form textarea {
+            resize: vertical;
+        }
+
+        .form button {
+            padding: 12px 30px;
+            background-color: #5d3fd3;
+            border: none;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+        
+        .form button:hover {
+            background-color: #7b58f8;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+            color: #777;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            /* Apply scroll animation class */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* Media Queries (Updated for Enderman Fix + Animations) */
+        @media screen and (max-width: 1000px) {
+            #home {
+                flex-direction: column;
+                align-items: center;
+                padding-bottom: 50px; /* Reduced padding as image is contained */
+            }
+            
+            .hero-text {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .headline, .highlight {
+                text-align: center;
+            }
+            
+            /* Mobile Positioning for hero-photo-container */
+            .hero-photo-container {
+                position: relative; /* Change to relative for stacking */
+                margin-top: 40px; /* Space from text */
+                right: auto;
+                top: auto;
+                /* Remove hover tilt on mobile to prevent accidental scrolls/flickers */
+                transform: none;
+            }
+            
+            .hero-photo-container img {
+                object-fit: contain; /* Ensure it fits */
+                object-position: center bottom;
+                transform: translateY(10px); /* Adjust to show logo */
+            }
+            
+            .info-card-grid {
+                padding: 0 10px;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                border-radius: 0;
+            }
+            
+            .headline {
+                font-size: 40px;
+            }
+
+            .highlight {
+                font-size: 60px;
+            }
+            
+            .section-heading {
+                font-size: 30px;
+            }
+            
+            .projects {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-embed.landscape iframe {
+                max-height: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <video autoplay muted loop playsinline id="bg-video">
-    <source src="01mot.mp4" type="video/mp4">
-  </video>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="01mot.mp4" type="video/mp4">
+    </video>
+    
+    <div class="bg-shape-1"></div>
+    <div class="bg-shape-2"></div>
 
-  <div id="container">
-    <header>
-      <div class="brand">
-        <div id="logo"></div>
-        <div id="name">fahedshafi</div>
-      </div>
-      <nav id="opt">
-        <div class="dropdown">
-          <button class="dropbtn">Menu ▾</button>
-          <div class="dropdown-content">
-            <a href="#home">Home</a>
-            <a href="#bio">About</a>
-            <a href="#services">Services</a>
-            <a href="#charges">Charges</a>
-            <a href="#projects">Projects</a>
-            <a href="#longform">Long-form</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </div>
-      </nav>
-    </header>
+    <div id="container">
+        <header>
+            <div class="brand">
+                <div id="logo"></div>
+                <div id="name">fahedshafi</div>
+            </div>
+            <nav id="opt">
+                <div class="dropdown">
+                    <button class="dropbtn">Menu ▾</button>
+                    <div class="dropdown-content">
+                        <a href="#home">Home</a>
+                        <a href="#bio">About</a>
+                        <a href="#services">Services</a>
+                        <a href="#charges">Charges</a>
+                        <a href="#projects">Projects</a>
+                        <a href="#longform">Long-form</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
 
-    <main>
-      <section id="home">
-        <div class="headline">Hi, I'm <br />An Editor</div>
-        <div class="highlight">Fahed</div>
-      </section>
+        <main>
+            <section id="home">
+                <div class="hero-text">
+                    <div class="headline">Hi, I'm An Editor</div>
+                    <div class="highlight">Fahed</div>
+                    <p style="font-size: 18px; margin-top: 20px; color: #ccc;">Passionate After Effects editor specializing in cinematic, minimalistic reels and high-impact social media content.</p>
+                    <a href="#contact" class="cta-button">Hire Me Now</a>
+                </div>
+                
+                <div class="hero-photo-container">
+                    <img src="endermannew.png" alt="Enderman with After Effects Logo">
+                </div>
+            </section>
 
-      <section id="bio">
-        <h2 class="section-heading">About Myself</h2>
-        <div class="bio">
-          I'm a passionate video editor working with After Effects 2024, specializing in creating minimalistic yet
-          eye-catching edits that leave a lasting impression. My style focuses on clean transitions, smooth pacing, and a
-          sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube, and reels. From cinematic
-          montages to fast-paced reels or aesthetic mood edits, I can handle a wide range of styles. I always aim to bring
-          creativity, emotion, and clarity into every frame. Whether it's a brand video, a content creator reel, or a
-          personal project, I give it my full attention and polish. Let's create something that not only looks good — but
-          feels powerful too.
-        </div>
-      </section>
+            <section id="bio">
+                <h2 class="section-heading animate-on-scroll">About Myself</h2>
+                <div class="info-card-grid">
+                    <div class="info-card animate-on-scroll" style="grid-column: span 2;">
+                        <h3>My Vision</h3>
+                        <p>I'm a passionate video editor working with **After Effects 2024**, specializing in creating minimalistic yet eye-catching edits that leave a lasting impression. My style focuses on clean transitions, smooth pacing, and a sharp visual aesthetic that fits perfectly across platforms like Instagram, YouTube, and reels.</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>Core Skills</h3>
+                        <p>Cinematic Montages, VFX Transitions, Typography Animations, Motion Tracking, Visual Enhancements, and color grading for a polished, emotional final look.</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>My Goal</h3>
+                        <p>I always aim to bring creativity, emotion, and clarity into every frame. Whether it's a brand video, a content creator reel, or a personal project, I give it my full attention and polish. Let's create something that not only looks good — but feels powerful too.</p>
+                    </div>
+                </div>
+            </section>
 
-      <section id="services">
-        <h2 class="section-heading">Services</h2>
-        <p class="services">I provide high-quality After Effects editing services including cinematic montages, social media reels, VFX transitions,
-          typography animations, motion tracking, and visual enhancements. Whether you're a content creator, brand, or business — I can transform raw footage into polished, eye-catching videos optimized for impact.
-        </p>
-      </section>
+            <section id="services">
+                <h2 class="section-heading animate-on-scroll">Services & Rates</h2>
+                <div class="info-card-grid">
+                    <div class="info-card animate-on-scroll">
+                        <h3>Reels & Shorts (60s)</h3>
+                        <p>Creation of fast-paced, high-impact short-form videos optimized for Instagram, TikTok, and YouTube Shorts. Perfect for content creators and brands.</p>
+                        <p style="margin-top: 15px; color: #1aa7ec;">**$5–$20 per edit** (Based on complexity)</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>Long-form Videos</h3>
+                        <p>Full-length YouTube videos, promotional videos, and detailed cinematic projects requiring in-depth pacing and storytelling. Perfect for extended content.</p>
+                        <p style="margin-top: 15px; color: #1aa7ec;">**Custom Quote Required** (Discuss via call/chat)</p>
+                    </div>
+                    <div class="info-card animate-on-scroll">
+                        <h3>Advanced VFX & Motion</h3>
+                        <p>Includes complex After Effects work such as detailed typography, advanced motion tracking, dynamic masking, and custom particle effects for a premium look.</p>
+                        <p style="margin-top: 15px; color: #1aa7ec;">**Add-on Service**</p>
+                    </div>
+                </div>
+            </section>
 
-      <section id="charges">
-        <h2 class="section-heading">Charges</h2>
-        <p class="services">
-          I charge <strong>$5–$20</strong> for a 60-second video — depending on the complexity of the edit, effects, and structure involved. 
-          For long-form edits (over 60 seconds or YouTube-style videos), we can discuss pricing in detail through a call or chat to make sure 
-          everything fits your needs and expectations.
-        </p>
-      </section>
+            <section id="projects">
+                <h2 class="section-heading animate-on-scroll">Projects (Shorts)</h2>
+                <div class="projects">
+                    <div class="project-embed portrait animate-on-scroll">
+                        <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen></iframe>
+                        <p>MY Project1 (VFX Reel)</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen></iframe>
+                        <p>MY Project2 (Aesthetic Mood)</p>
+                    </div>
+                    <div class="project-embed portrait animate-on-scroll">
+                        <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen></iframe>
+                        <p>MY Project3 (Cinematic Pacing)</p>
+                    </div>
+                </div>
+            </section>
 
-      <section id="projects">
-        <h2 class="section-heading">Projects (Shorts)</h2>
-        <div class="projects">
-          <div class="project-embed portrait">
-            <iframe src="https://drive.google.com/file/d/1SgWGRdU3JOUo_ePwTQtzEHm8Jj_zgbUx/preview" allow="autoplay" allowfullscreen></iframe>
-            <p>MY Project1</p>
-          </div>
-          <div class="project-embed portrait">
-            <iframe src="https://drive.google.com/file/d/1GuWZoRewJsbDI6Hy74po_8C_D8Dvxj_7/preview" allow="autoplay" allowfullscreen></iframe>
-            <p>MY Project2</p>
-          </div>
-          <div class="project-embed portrait">
-            <iframe src="https://drive.google.com/file/d/1Uvt-dESxUd35n_-0sGD9Et_v-Xnmj27e/preview" allow="autoplay" allowfullscreen></iframe>
-            <p>MY Project3</p>
-          </div>
-        </div>
-      </section>
+            <section id="longform">
+                <h2 class="section-heading animate-on-scroll">Long-form Projects</h2>
+                <div class="projects">
+                    <div class="project-embed landscape animate-on-scroll" style="grid-column: 1 / -1;">
+                        <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen></iframe>
+                        <p>MY Long-form Project (Promotional)</p>
+                    </div>
+                </div>
+            </section>
 
-      <section id="longform">
-        <h2 class="section-heading">Long-form Projects</h2>
-        <div class="projects">
-          <div class="project-embed landscape">
-            <iframe src="https://drive.google.com/file/d/1lFjRbM-z-cNQmbTeAJiNZxNpIkNggpzE/preview" allow="autoplay" allowfullscreen></iframe>
-            <p>MY Long-form Project</p>
-          </div>
-        </div>
-      </section>
+            <section id="contact">
+                <h2 class="section-heading animate-on-scroll">Get in Touch</h2>
+                <div class="contact-container">
+                    <div class="contact-info animate-on-scroll">
+                        <h3>Let's Collaborate</h3>
+                        <p>Ready to turn your raw footage into an eye-catching masterpiece? Contact me using the form or connect through my social channels. I usually reply within 24 hours.</p>
+                        <p>Email: <a href="mailto:fahadshafisheikh@outlook.com">fahadshafisheikh@outlook.com</a></p>
+                        <p>Instagram: <a href="https://www.instagram.com/fahedshafi" target="_blank">@fahedshafi</a></p>
+                    </div>
+                    
+                    <form action="https://formsubmit.co/fahadshafisheikh@outlook.com" method="POST" class="form animate-on-scroll">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_honey" style="display:none">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </section>
+        </main>
 
-      <section id="contact">
-        <h2 class="section-heading">Contact</h2>
-        <div class="contact">
-          <p>Email: <a href="mailto:fahadshafisheikh@outlook.com">fahadshafisheikh@outlook.com</a></p>
-          <p>Instagram: <a href="https://www.instagram.com/fahedshafi" target="_blank">@fahedshafi</a></p>
-        </div>
+        <footer class="animate-on-scroll">
+            &copy; 2025 Fahed Shafi. All rights reserved. Built with the **Glassmorphism** style.
+        </footer>
+    </div>
+    
+    <script>
+        // JavaScript for Scroll Animations (Intersection Observer)
+        document.addEventListener("DOMContentLoaded", function() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            // The footer is outside the loop because it doesn't use the 'animate-on-scroll' helper class
+            const footer = document.querySelector('footer');
 
-        <form action="https://formsubmit.co/fahadshafisheikh@outlook.com" method="POST" class="form">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="text" name="_honey" style="display:none">
-          <input type="text" name="name" placeholder="Your Name" required>
-          <input type="email" name="email" placeholder="Your Email" required>
-          <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-          <button type="submit">Send Message</button>
-        </form>
-      </section>
-    </main>
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the item is visible
+            };
 
-    <footer>
-      &copy; 2025 Fahed Shafi. All rights reserved.
-    </footer>
-  </div>
+            function handleIntersect(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once it's visible
+                    }
+                });
+            }
+
+            const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+            // Observe all elements with the animation class
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Observe the footer separately
+            if (footer) {
+                observer.observe(footer);
+            }
+        });
+    </script>
 </body>
 </html>
