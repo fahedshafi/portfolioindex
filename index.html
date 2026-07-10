@@ -18,11 +18,13 @@
         :root {
             --ios-bg: #000000;
             --ios-accent: #007AFF;
+            --ios-accent-soft: #6ec1ff;
             --ios-glass: rgba(25, 25, 25, 0.4);
             --ios-glass-border: rgba(255, 255, 255, 0.15);
             --ios-text: #FFFFFF;
             --ios-text-secondary: #8E8E93;
             --squircle: 45px;
+            --ease-spatial: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html { scroll-behavior: smooth; }
@@ -33,13 +35,58 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        ::selection { background: var(--ios-accent); color: #fff; }
+
         body {
             background-color: var(--ios-bg);
             color: var(--ios-text);
             overflow-x: hidden;
-            background-image: 
+            position: relative;
+            background-image:
                 radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(255, 0, 0, 0.08) 0px, transparent 50%);
+        }
+
+        /* --- FILM GRAIN OVERLAY --- */
+        .grain {
+            position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+            opacity: 0.035; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* --- SCROLL PROGRESS --- */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+            background: linear-gradient(90deg, var(--ios-accent), var(--ios-accent-soft));
+            z-index: 3000; box-shadow: 0 0 12px var(--ios-accent);
+            transition: width 0.1s linear;
+        }
+
+        /* --- LOADER --- */
+        .loader {
+            position: fixed; inset: 0; background: #000; z-index: 5000;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.8s var(--ease-spatial), visibility 0.8s;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-mark {
+            font-size: 15px; letter-spacing: 6px; color: var(--ios-text-secondary);
+            text-transform: uppercase; position: relative; padding-bottom: 14px;
+        }
+        .loader-mark::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 2px; background: var(--ios-glass-border); overflow: hidden;
+        }
+        .loader-mark::before {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 2px; background: var(--ios-accent);
+            animation: loadbar 1.4s var(--ease-spatial) infinite;
+            box-shadow: 0 0 8px var(--ios-accent);
+        }
+        @keyframes loadbar {
+            0% { clip-path: inset(0 100% 0 0); }
+            50% { clip-path: inset(0 0 0 0); }
+            100% { clip-path: inset(0 0 0 100%); }
         }
 
         /* --- SPATIAL DYNAMIC ISLAND NAV --- */
@@ -61,8 +108,9 @@
             padding: 12px 35px;
             border-radius: 50px;
             display: flex;
+            align-items: center;
             gap: 30px;
-            transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+            transition: all 0.5s var(--ease-spatial);
         }
 
         nav:hover {
@@ -80,6 +128,8 @@
             transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        nav a.active { color: #fff; }
+
         nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
 
         nav a::after {
@@ -89,7 +139,7 @@
             transition: 0.3s; box-shadow: 0 0 10px var(--ios-accent);
         }
 
-        nav a:hover::after { width: 12px; }
+        nav a:hover::after, nav a.active::after { width: 12px; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 140px 20px 60px; }
 
@@ -115,82 +165,200 @@
             filter: blur(60px); animation: drift 15s infinite alternate;
         }
 
+        .hero-main::after {
+            content: ""; position: absolute; bottom: -30%; right: -10%; width: 60%; height: 60%;
+            background: radial-gradient(circle, rgba(255, 0, 60, 0.08) 0%, transparent 70%);
+            filter: blur(70px); animation: drift 18s infinite alternate-reverse;
+        }
+
         @keyframes drift { from { transform: translate(0, 0); } to { transform: translate(40%, 30%); } }
 
-        .headline { font-size: clamp(45px, 7vw, 80px); font-weight: 800; letter-spacing: -4px; line-height: 0.85; margin-bottom: 25px; }
-        .headline span { background: linear-gradient(180deg, #fff 40%, #777 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .headline .blue-text { background: linear-gradient(180deg, #6ec1ff 0%, #007AFF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--ios-text-secondary); margin-bottom: 22px;
+            opacity: 0; animation: fadeUp 0.8s var(--ease-spatial) 0.2s forwards;
+        }
+        .eyebrow .dot {
+            width: 7px; height: 7px; border-radius: 50%; background: #34C759;
+            box-shadow: 0 0 8px #34C759; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        .sub-headline { font-size: 19px; color: var(--ios-text-secondary); max-width: 450px; line-height: 1.5; margin-bottom: 40px; }
+        .headline { font-size: clamp(45px, 7vw, 80px); font-weight: 800; letter-spacing: -4px; line-height: 0.85; margin-bottom: 25px; position: relative; z-index: 1; }
+        .headline .line { display: block; overflow: hidden; }
+        .headline .line span { display: block; opacity: 0; transform: translateY(110%); animation: fadeUp 0.9s var(--ease-spatial) forwards; }
+        .headline .line:nth-child(1) span { animation-delay: 0.35s; }
+        .headline .line:nth-child(2) span { animation-delay: 0.5s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .headline span.grad-white { background: linear-gradient(180deg, #fff 40%, #777 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .headline .blue-text { background: linear-gradient(180deg, var(--ios-accent-soft) 0%, var(--ios-accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .sub-headline {
+            font-size: 19px; color: var(--ios-text-secondary); max-width: 450px; line-height: 1.5; margin-bottom: 40px;
+            opacity: 0; animation: fadeUp 0.8s var(--ease-spatial) 0.7s forwards;
+        }
+
+        .cta-row { display: flex; align-items: center; gap: 22px; opacity: 0; animation: fadeUp 0.8s var(--ease-spatial) 0.85s forwards; }
 
         .cta-button {
             background: #FFFFFF; color: #000; padding: 18px 38px; border-radius: 20px;
-            text-decoration: none; font-weight: 600; display: inline-block;
-            transition: 0.3s; box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+            text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px;
+            transition: 0.4s var(--ease-spatial); box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+            position: relative; overflow: hidden;
         }
         .cta-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,255,255,0.2); }
+        .cta-button svg { transition: transform 0.4s var(--ease-spatial); }
+        .cta-button:hover svg { transform: translate(3px, -3px); }
+
+        .cta-secondary {
+            color: var(--ios-text-secondary); text-decoration: none; font-size: 14px; font-weight: 500;
+            border-bottom: 1px solid transparent; transition: 0.3s;
+        }
+        .cta-secondary:hover { color: #fff; border-color: var(--ios-accent); }
 
         .hero-image-card {
             background: #1c1c1e; border-radius: var(--squircle); overflow: hidden;
             border: 1px solid var(--ios-glass-border); box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            position: relative;
         }
-        .hero-image-card img { width: 100%; height: 100%; object-fit: cover; transition: 1s cubic-bezier(0.2, 1, 0.2, 1); }
-        .hero-image-card:hover img { transform: scale(1.08); }
+        .hero-image-card::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.5) 100%);
+            pointer-events: none;
+        }
+        .hero-image-card img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s var(--ease-spatial); transform: scale(1.02); }
+        .hero-image-card:hover img { transform: scale(1.1); }
 
         /* --- VIDEO GRIDS --- */
-        .section-header { font-size: 34px; font-weight: 700; margin: 100px 0 30px; letter-spacing: -1px; }
+        .section-header-wrap { margin: 110px 0 30px; display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
+        .section-header { font-size: 34px; font-weight: 700; letter-spacing: -1px; }
+        .section-count { color: var(--ios-text-secondary); font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+
         .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
 
         .ios-video-card {
             background: #1c1c1e; border-radius: 35px; overflow: hidden;
             position: relative; aspect-ratio: 9/16; cursor: pointer;
-            border: 1px solid var(--ios-glass-border); transition: 0.4s;
+            border: 1px solid var(--ios-glass-border); transition: transform 0.5s var(--ease-spatial), border-color 0.4s, box-shadow 0.5s;
+            will-change: transform;
         }
-        .ios-video-card:hover { transform: scale(1.02); border-color: var(--ios-accent); }
+        .ios-video-card:hover { transform: translateY(-6px) scale(1.015); border-color: var(--ios-accent); box-shadow: 0 25px 60px rgba(0,122,255,0.18); }
         .ios-video-card.landscape { aspect-ratio: 16/9; }
+
+        .ios-video-card.disabled { cursor: default; opacity: 0.5; }
+        .ios-video-card.disabled:hover { transform: none; border-color: var(--ios-glass-border); box-shadow: none; }
+        .ios-video-card.disabled .status-icon { background: rgba(255,255,255,0.08); }
+
+        .thumb-glow {
+            position: absolute; inset: 0; z-index: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(0,122,255,0.18), transparent 65%);
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .ios-video-card:hover .thumb-glow { opacity: 1; }
 
         .status-icon {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 65px; height: 65px; background: rgba(255, 255, 255, 0.2);
+            width: 65px; height: 65px; background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(15px); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; z-index: 3;
-            transition: 0.3s; color: white; font-size: 20px;
+            transition: 0.4s var(--ease-spatial); color: white; font-size: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
         }
-        .ios-video-card:hover .status-icon { background: rgba(255, 255, 255, 0.35); transform: translate(-50%, -50%) scale(1.1); }
+        .ios-video-card:hover .status-icon { background: var(--ios-accent); transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 0 30px rgba(0,122,255,0.5); border-color: transparent; }
 
         .video-overlay {
             position: absolute; inset: 0; padding: 25px; z-index: 2;
             background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 60%);
             display: flex; flex-direction: column; justify-content: flex-end;
         }
+        .video-overlay p { font-weight: 600; font-size: 15px; letter-spacing: -0.2px; }
+        .video-overlay span.tag { display: block; margin-top: 4px; font-size: 12px; color: var(--ios-text-secondary); }
 
         iframe { width: 100%; height: 100%; border: none; display: none; }
 
+        .card-skeleton {
+            position: absolute; inset: 0; z-index: 1;
+            background: linear-gradient(110deg, #1c1c1e 8%, #26262a 18%, #1c1c1e 33%);
+            background-size: 200% 100%; animation: shimmer 1.6s linear infinite;
+        }
+        @keyframes shimmer { to { background-position-x: -200%; } }
+
         /* --- CONTACT SECTION --- */
         .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
+        .contact-info h3 { font-size: 26px; letter-spacing: -0.5px; margin-bottom: 15px; }
+        .contact-link-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--ios-glass-border); }
+        .contact-link-row:last-child { border-bottom: none; }
+        .contact-link-row .icon { width: 36px; height: 36px; border-radius: 12px; background: rgba(0,122,255,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--ios-accent); }
+        .contact-link-row a { color: #fff; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        .contact-link-row a:hover { color: var(--ios-accent); }
+        .contact-link-row .label { font-size: 12px; color: var(--ios-text-secondary); display: block; margin-bottom: 2px; }
+
         .form { display: flex; flex-direction: column; gap: 15px; }
+        .field { position: relative; }
         input, textarea {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--ios-glass-border);
-            border-radius: 18px; padding: 18px; color: white; outline: none; transition: 0.3s;
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--ios-glass-border);
+            border-radius: 18px; padding: 18px; color: white; outline: none; transition: 0.3s; font-size: 15px;
         }
-        input:focus, textarea:focus { border-color: var(--ios-accent); background: rgba(255,255,255,0.1); }
+        input:focus, textarea:focus { border-color: var(--ios-accent); background: rgba(255,255,255,0.08); box-shadow: 0 0 0 4px rgba(0,122,255,0.12); }
+        textarea { resize: vertical; min-height: 100px; }
         button[type="submit"] {
             background: var(--ios-accent); color: white; border: none;
-            padding: 20px; border-radius: 18px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            padding: 20px; border-radius: 18px; font-weight: 600; cursor: pointer; transition: 0.3s var(--ease-spatial);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        button[type="submit"]:hover { opacity: 0.9; transform: scale(0.98); }
+        button[type="submit"]:hover { opacity: 0.92; transform: scale(0.99); box-shadow: 0 10px 30px rgba(0,122,255,0.3); }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s var(--ease-spatial); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-stagger.active { transition-delay: calc(var(--i) * 60ms); }
 
-        @media (max-width: 900px) { .hero-bento, .contact-container { grid-template-columns: 1fr; } .hero-image-card { height: 400px; } }
+        footer { text-align: center; padding: 100px 0 40px; color: var(--ios-text-secondary); }
+        .footer-mark { font-size: 13px; opacity: 0.6; }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; }
+        .footer-links a { color: var(--ios-text-secondary); text-decoration: none; font-size: 13px; transition: 0.3s; }
+        .footer-links a:hover { color: #fff; }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%;
+            background: var(--ios-glass); backdrop-filter: blur(20px); border: 1px solid var(--ios-glass-border);
+            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1500;
+            opacity: 0; pointer-events: none; transform: translateY(10px);
+            transition: 0.4s var(--ease-spatial); color: #fff;
+        }
+        .back-to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .back-to-top:hover { background: var(--ios-accent); border-color: transparent; transform: translateY(-3px); }
+
+        @media (max-width: 900px) {
+            .hero-bento, .contact-container { grid-template-columns: 1fr; }
+            .hero-image-card { height: 400px; }
+            nav { gap: 16px; padding: 10px 18px; }
+            nav a { font-size: 13px; }
+            .section-header-wrap { margin-top: 80px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="grain"></div>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div class="loader" id="loader">
+        <div class="loader-mark">FAHED&nbsp;·&nbsp;AEP</div>
+    </div>
+
     <div class="nav-wrapper">
         <nav id="dynamicIsland">
-            <a href="#home">Home</a>
+            <a href="#home" class="active">Home</a>
             <a href="#shorts">Shorts</a>
             <a href="#longform">Longform</a>
             <a href="#contact">Contact</a>
@@ -201,12 +369,19 @@
         <section id="home" class="hero-bento">
             <div class="hero-main" id="tiltCard">
                 <div class="hero-content">
+                    <div class="eyebrow"><span class="dot"></span> Available for new projects</div>
                     <h1 class="headline">
-                        <span>This side</span><br>
-                        <span class="blue-text">千 卂 卄 乇 ᗪ</span>
+                        <span class="line"><span class="grad-white">This side</span></span>
+                        <span class="line"><span class="blue-text">千 卂 卄 乇 ᗪ</span></span>
                     </h1>
-                    <p class="sub-headline"><b>Not Your Average Editor 💀</b></p>
-                    <a href="#contact" class="cta-button">Get in Touch</a>
+                    <p class="sub-headline"><b>Not Your Average Editor 💀</b><br>Cinematic edits, motion graphics &amp; short-form content that stops the scroll.</p>
+                    <div class="cta-row">
+                        <a href="#contact" class="cta-button">
+                            Get in Touch
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <a href="#shorts" class="cta-secondary">View Work ↓</a>
+                    </div>
                 </div>
             </div>
             <div class="hero-image-card">
@@ -214,56 +389,100 @@
             </div>
         </section>
 
-        <h2 id="shorts" class="section-header">Short-form Projects</h2>
+        <div class="section-header-wrap">
+            <h2 id="shorts" class="section-header">Short-form Projects</h2>
+            <span class="section-count">08 pieces</span>
+        </div>
         <div class="project-grid">
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Aesthetic Insta reel</p></div><iframe data-src="https://drive.google.com/file/d/1g7cApgk0G5zEHMUdU6F67Gdspki4A-fx/view?usp=sharing"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>PR reel</p></div><iframe data-src="https://drive.google.com/file/d/17Pw6x8-xRQI4Ad4EPbO0Lmfx8i3C-OCi/view?usp=sharing"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Motion Graphics</p></div><iframe data-src="https://drive.google.com/file/d/1E7oY6Qxtpw7ksAIBpN-fa_NO02CZPbvq/view?usp=sharing"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Motion Graphics</p></div><iframe data-src="https://drive.google.com/file/d/1C5Vqu8wEANeAxAg29jVQ1_BSSDLfAD8d/preview"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Talking Head Edit</p></div><iframe data-src="https://drive.google.com/file/d/1mI7Ac6Kj6uM7a4WKO9468zG07K_51LEb/view?usp=sharing"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Promotional [1]</p></div><iframe data-src="https://drive.google.com/file/d/12m3_NAxxYbp1pH_bV42ZYsosRLTnkCi_/preview"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Promotional [2]</p></div><iframe data-src="https://drive.google.com/file/d/18z3XIqQ3pmnnk_PAVrUsZiyKFZ8b23bO/preview"></iframe></div>
-            <div class="ios-video-card reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Funk Edit</p></div><iframe data-src=""></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:1" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Aesthetic Insta Reel</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/1g7cApgk0G5zEHMUdU6F67Gdspki4A-fx/preview"></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:2" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>PR Reel</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/17Pw6x8-xRQI4Ad4EPbO0Lmfx8i3C-OCi/preview"></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:3" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Motion Graphics</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/1E7oY6Qxtpw7ksAIBpN-fa_NO02CZPbvq/preview"></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:4" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Motion Graphics</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/1C5Vqu8wEANeAxAg29jVQ1_BSSDLfAD8d/preview"></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:5" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Talking Head Edit</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/1mI7Ac6Kj6uM7a4WKO9468zG07K_51LEb/preview"></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:6" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Promotional [1]</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/12m3_NAxxYbp1pH_bV42ZYsosRLTnkCi_/preview"></iframe></div>
+            <div class="ios-video-card reveal reveal-stagger" style="--i:7" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Promotional [2]</p><span class="tag">Short-form</span></div><iframe data-src="https://drive.google.com/file/d/18z3XIqQ3pmnnk_PAVrUsZiyKFZ8b23bO/preview"></iframe></div>
+            <div class="ios-video-card disabled reveal reveal-stagger" style="--i:8"><div class="card-skeleton"></div><div class="status-icon">⏳</div><div class="video-overlay"><p>Funk Edit</p><span class="tag">Coming soon</span></div></div>
         </div>
 
-        <h2 id="longform" class="section-header">Long-form Projects</h2>
+        <div class="section-header-wrap">
+            <h2 id="longform" class="section-header">Long-form Projects</h2>
+            <span class="section-count">03 pieces</span>
+        </div>
         <div class="project-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
-            <div class="ios-video-card landscape reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Promotional Showcase</p></div><iframe data-src="https://drive.google.com/file/d/1M2zCJmH_0iLIxGAPmK-ZF_B1oowpzKzA/view?usp=sharing"></iframe></div>
-            <div class="ios-video-card landscape reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Explainer</p></div><iframe data-src="https://drive.google.com/file/d/1XDZwboLZy_kidh673oMIt4K-90OHjgiH/view?usp=sharing"></iframe></div>
-            <div class="ios-video-card landscape reveal" onclick="playVideo(this)"><div class="status-icon">▶</div><div class="video-overlay"><p>Advertisement</p></div><iframe data-src="https://drive.google.com/file/d/1Guq9ugl8PJ-35t3XUKiv9GB01VOHdlMx/preview"></iframe></div>
+            <div class="ios-video-card landscape reveal reveal-stagger" style="--i:1" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Promotional Showcase</p><span class="tag">Long-form</span></div><iframe data-src="https://drive.google.com/file/d/1M2zCJmH_0iLIxGAPmK-ZF_B1oowpzKzA/preview"></iframe></div>
+            <div class="ios-video-card landscape reveal reveal-stagger" style="--i:2" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Explainer</p><span class="tag">Long-form</span></div><iframe data-src="https://drive.google.com/file/d/1XDZwboLZy_kidh673oMIt4K-90OHjgiH/preview"></iframe></div>
+            <div class="ios-video-card landscape reveal reveal-stagger" style="--i:3" onclick="playVideo(this)"><div class="card-skeleton"></div><div class="thumb-glow"></div><div class="status-icon">▶</div><div class="video-overlay"><p>Advertisement</p><span class="tag">Long-form</span></div><iframe data-src="https://drive.google.com/file/d/1Guq9ugl8PJ-35t3XUKiv9GB01VOHdlMx/preview"></iframe></div>
         </div>
 
-        <h2 id="contact" class="section-header">Contact & Inquiries</h2>
+        <div class="section-header-wrap">
+            <h2 id="contact" class="section-header">Contact &amp; Inquiries</h2>
+        </div>
         <div class="hero-main contact-container reveal">
             <div class="contact-info">
-                <h3 style="margin-bottom: 15px;">Let's Work Together</h3>
-                <p style="color: var(--ios-text-secondary); margin-bottom: 25px;">Ready to elevate your content with cinematic editing? Reach out today.</p>
-                <p>Email: <a href="mailto:fahadshafisheikh@outlook.com" style="color: var(--ios-accent); text-decoration: none;">fahadshafisheikh@outlook.com</a></p>
-                <p style="margin-top: 10px;">Instagram: <a href="https://www.instagram.com/fhd_aep/" target="_blank" style="color: var(--ios-accent); text-decoration: none;">@fhd_aep</a></p>
+                <h3>Let's Work Together</h3>
+                <p style="color: var(--ios-text-secondary); margin-bottom: 10px;">Ready to elevate your content with cinematic editing? Reach out today.</p>
+
+                <div class="contact-link-row">
+                    <div class="icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 5H21V19H3V5Z" stroke="currentColor" stroke-width="1.6"/><path d="M3 6L12 13L21 6" stroke="currentColor" stroke-width="1.6"/></svg>
+                    </div>
+                    <div>
+                        <span class="label">Email</span>
+                        <a href="mailto:fahadshafisheikh@outlook.com">fahadshafisheikh@outlook.com</a>
+                    </div>
+                </div>
+                <div class="contact-link-row">
+                    <div class="icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
+                    </div>
+                    <div>
+                        <span class="label">Instagram</span>
+                        <a href="https://www.instagram.com/fhd_aep/" target="_blank">@fhd_aep</a>
+                    </div>
+                </div>
             </div>
-            
+
             <form action="https://formsubmit.co/fahadshafisheikh@outlook.com" method="POST" class="form">
                 <input type="hidden" name="_captcha" value="false">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" rows="4" placeholder="How can I help you?" required></textarea>
-                <button type="submit">Send Message</button>
+                <div class="field"><input type="text" name="name" placeholder="Your Name" required></div>
+                <div class="field"><input type="email" name="email" placeholder="Your Email" required></div>
+                <div class="field"><textarea name="message" rows="4" placeholder="How can I help you?" required></textarea></div>
+                <button type="submit">
+                    Send Message
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8H14M14 8L9 3M14 8L9 13" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
             </form>
         </div>
 
-        <footer style="text-align: center; padding: 100px 0; color: var(--ios-text-secondary); font-size: 13px; opacity: 0.6;">
-            &copy; 2026 Fahed Shafi. Built with iOS 26 Spatial Guidelines.
+        <footer>
+            <div class="footer-links">
+                <a href="mailto:fahadshafisheikh@outlook.com">Email</a>
+                <a href="https://www.instagram.com/fhd_aep/" target="_blank">Instagram</a>
+                <a href="#home">Back to top</a>
+            </div>
+            <div class="footer-mark">&copy; 2026 Fahed Shafi. Built with iOS 26 Spatial Guidelines.</div>
         </footer>
     </div>
 
+    <div class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+
     <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 400);
+        });
+
         // Intersection Observer for scroll reveals
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Dynamic Island Scroll Morph
+        // Dynamic Island Scroll Morph + active link + progress bar + back to top
+        const sections = ['home', 'shorts', 'longform', 'contact'].map(id => document.getElementById(id));
+        const navLinks = document.querySelectorAll('nav a');
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('dynamicIsland');
             if (window.scrollY > 50) {
@@ -275,6 +494,16 @@
                 nav.style.transform = "scale(1)";
                 nav.style.background = "rgba(25, 25, 25, 0.4)";
             }
+
+            const doc = document.documentElement;
+            const scrollPct = (window.scrollY / (doc.scrollHeight - doc.clientHeight)) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPct + '%';
+
+            document.getElementById('backToTop').classList.toggle('show', window.scrollY > 600);
+
+            let currentId = 'home';
+            sections.forEach(sec => { if (sec && window.scrollY >= sec.offsetTop - 160) currentId = sec.id; });
+            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + currentId));
         });
 
         // 3D Tilt Effect for Hero Card
@@ -288,10 +517,15 @@
         // Video Controller
         function playVideo(card) {
             const iframe = card.querySelector('iframe');
-            iframe.src = iframe.getAttribute('data-src');
+            if (!iframe) return;
+            const src = iframe.getAttribute('data-src');
+            if (!src) return;
+            iframe.src = src;
             iframe.style.display = 'block';
             card.querySelector('.status-icon').style.display = 'none';
             card.querySelector('.video-overlay').style.display = 'none';
+            const skeleton = card.querySelector('.card-skeleton');
+            if (skeleton) skeleton.style.display = 'none';
         }
 
         // Smooth Scroll Fallback
@@ -305,7 +539,3 @@
     </script>
 </body>
 </html>
-
-
-
-
